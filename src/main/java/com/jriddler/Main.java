@@ -2,6 +2,9 @@ package com.jriddler;
 
 import java.sql.*;
 
+/**
+ * Main endpoint.
+ */
 public final class Main {
     public static void main(final String[] args) throws SQLException {
         final DefinitionFactory factory = new DefinitionFactory();
