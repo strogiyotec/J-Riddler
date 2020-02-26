@@ -7,4 +7,11 @@ public interface AttributeDefinition {
     int size();
 
     String name();
+
+    DefinitionType type();
+
+    static enum DefinitionType {
+        STRING,
+        NUMBER
+    }
 }

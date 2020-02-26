@@ -1,13 +1,16 @@
 package com.jriddler;
 
 import com.github.javafaker.Faker;
+import lombok.AllArgsConstructor;
 
-
+@AllArgsConstructor
 public final class VarCharAttr implements AttributeDefinition {
 
     private final String name;
 
     private final int length;
+
+    private final String value;
 
     public VarCharAttr(final String name, final int length) {
         this.name = name;
@@ -16,11 +19,12 @@ public final class VarCharAttr implements AttributeDefinition {
         } else {
             this.length = length;
         }
+        this.value = new Faker().regexify(String.format("[a-z1-9]{%d}", this.length));
     }
 
     @Override
     public String value() {
-        return new Faker().regexify(String.format("[a-z1-9]{%d}", this.length));
+        return this.value;
     }
 
     @Override
@@ -31,5 +35,10 @@ public final class VarCharAttr implements AttributeDefinition {
     @Override
     public String name() {
         return this.name;
+    }
+
+    @Override
+    public DefinitionType type() {
+        return DefinitionType.STRING;
     }
 }

@@ -9,9 +9,18 @@ public final class BoolAttr implements AttributeDefinition {
 
     private final String name;
 
+    private final boolean value;
+
+    public BoolAttr(final String name) {
+        this(
+                name,
+                ThreadLocalRandom.current().nextBoolean()
+        );
+    }
+
     @Override
     public Boolean value() {
-        return ThreadLocalRandom.current().nextBoolean();
+        return this.value;
     }
 
     @Override
@@ -22,5 +31,10 @@ public final class BoolAttr implements AttributeDefinition {
     @Override
     public String name() {
         return this.name;
+    }
+
+    @Override
+    public DefinitionType type() {
+        return DefinitionType.NUMBER;
     }
 }

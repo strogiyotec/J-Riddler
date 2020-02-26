@@ -7,12 +7,21 @@ import java.util.concurrent.ThreadLocalRandom;
 @AllArgsConstructor
 public final class IntAttr implements AttributeDefinition {
 
-
     private final String name;
+
+    private final int value;
+
+
+    public IntAttr(final String name) {
+        this(
+                name,
+                ThreadLocalRandom.current().nextInt(0, 10)
+        );
+    }
 
     @Override
     public Integer value() {
-        return ThreadLocalRandom.current().nextInt(0, 10);
+        return this.value;
     }
 
     @Override
@@ -23,5 +32,10 @@ public final class IntAttr implements AttributeDefinition {
     @Override
     public String name() {
         return this.name;
+    }
+
+    @Override
+    public DefinitionType type() {
+        return DefinitionType.NUMBER;
     }
 }

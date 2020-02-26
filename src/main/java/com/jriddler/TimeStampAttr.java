@@ -2,16 +2,25 @@ package com.jriddler;
 
 import lombok.AllArgsConstructor;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 public final class TimeStampAttr implements AttributeDefinition {
 
     private final String name;
 
+    private final OffsetDateTime value;
+
+    public TimeStampAttr(final String name) {
+        this(
+                name,
+                OffsetDateTime.now()
+        );
+    }
+
     @Override
     public Object value() {
-        return new Date();
+        return this.value;
     }
 
     @Override
@@ -21,6 +30,11 @@ public final class TimeStampAttr implements AttributeDefinition {
 
     @Override
     public String name() {
-        return null;
+        return this.name;
+    }
+
+    @Override
+    public DefinitionType type() {
+        return DefinitionType.STRING;
     }
 }
