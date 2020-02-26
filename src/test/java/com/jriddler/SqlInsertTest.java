@@ -9,13 +9,11 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoField;
 import java.util.Arrays;
-import java.util.Date;
 
 public final class SqlInsertTest {
 
-    private final OffsetDateTime NOW = OffsetDateTime.now();
+    private static final OffsetDateTime NOW = OffsetDateTime.now();
 
     private SqlOperation<Boolean> sqlOperation;
 
