@@ -4,40 +4,37 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.postgresql.ds.PGSimpleDataSource;
 
-import javax.sql.DataSource;
 import java.sql.*;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 
-public final class SqlInsertTest {
+public final class SqlInsertTest extends DbTest {
 
-    private static final OffsetDateTime NOW = OffsetDateTime.now();
+    private User user;
 
     private SqlOperation<Boolean> sqlOperation;
 
-    private DataSource dataSource;
-
-
     @Before
     public void init() {
-        final PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setUrl("jdbc:postgresql://127.0.0.1:5432/test");
-        dataSource.setUser("postgres");
-        dataSource.setPassword("123");
-        this.dataSource = dataSource;
+        this.user = new User(
+                "Almas",
+                "Abdrazak",
+                NOW,
+                25,
+                10,
+                true
+        );
         this.sqlOperation = new SqlInsert(
-                dataSource,
+                DATASOURCE,
                 Arrays.asList(
-                        new IntAttr("age", 25),
-                        new VarCharAttr("name", 6, "Almas"),
-                        new VarCharAttr("surname", 6, "Abdrazak"),
-                        new BoolAttr("active", true),
-                        new TimeStampAttr("birthday", NOW),
-                        new BigIntAttr("id", 10)
+                        new IntAttr("age", this.user.getAge()),
+                        new VarCharAttr("name", 6, this.user.getName()),
+                        new VarCharAttr("surname", 6, this.user.getSurname()),
+                        new BoolAttr("active", this.user.isActive()),
+                        new TimeStampAttr("birthday", this.user.getBirthday()),
+                        new BigIntAttr("id", this.user.getId())
                 ),
-                "test_users"
+                "users"
         );
     }
 
@@ -45,34 +42,34 @@ public final class SqlInsertTest {
     public void testSqlInsert() throws SQLException {
         Assert.assertFalse(this.sqlOperation.perform());
 
-        try (final Connection connection = this.dataSource.getConnection()) {
-            try (final PreparedStatement statement = connection.prepareStatement("SELECT age,name,surname,active,birthday,id FROM test_users WHERE id = ?")) {
+        try (final Connection connection = DATASOURCE.getConnection()) {
+            try (final PreparedStatement statement = connection.prepareStatement("SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?")) {
                 statement.setLong(1, 10);
                 try (final ResultSet set = statement.executeQuery()) {
                     while (set.next()) {
                         Assert.assertThat(
                                 set.getInt(1),
-                                CoreMatchers.is(25)
+                                CoreMatchers.is(this.user.getAge())
                         );
                         Assert.assertThat(
                                 set.getString(2),
-                                CoreMatchers.is("Almas")
+                                CoreMatchers.is(this.user.getName())
                         );
                         Assert.assertThat(
                                 set.getString(3),
-                                CoreMatchers.is("Abdrazak")
+                                CoreMatchers.is(this.user.getSurname())
                         );
                         Assert.assertThat(
                                 set.getBoolean(4),
-                                CoreMatchers.is(true)
+                                CoreMatchers.is(this.user.isActive())
                         );
                         Assert.assertThat(
                                 set.getTimestamp(5).getTime(),
-                                CoreMatchers.is(Timestamp.valueOf(NOW.toLocalDateTime()).getTime())
+                                CoreMatchers.is(Timestamp.valueOf(this.user.getBirthday().toLocalDateTime()).getTime())
                         );
                         Assert.assertThat(
                                 set.getLong(6),
-                                CoreMatchers.is(10L)
+                                CoreMatchers.is(this.user.getId())
                         );
                     }
                 }
