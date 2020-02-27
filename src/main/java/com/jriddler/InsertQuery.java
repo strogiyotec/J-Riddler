@@ -58,7 +58,10 @@ public final class InsertQuery {
      * @param queryBuilder QueryBuilder
      */
     private void insertInto(final StringBuilder queryBuilder) {
-        queryBuilder.append("INSERT INTO ").append(this.tableName).append("\n(");
+        queryBuilder
+                .append("INSERT INTO ")
+                .append(this.tableName)
+                .append("\n(");
         for (int i = 0; i < this.attributes.size(); i++) {
             final AttributeDefinition attribute = this.attributes.get(i);
             queryBuilder.append(attribute.name());

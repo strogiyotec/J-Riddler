@@ -38,6 +38,7 @@ public final class TimeStampAttr implements AttributeDefinition {
     }
 
     @Override
+    @SuppressWarnings("MagicNumber")
     public int size() {
         return 35;
     }

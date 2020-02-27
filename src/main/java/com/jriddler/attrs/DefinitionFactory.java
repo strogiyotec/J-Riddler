@@ -1,7 +1,5 @@
 package com.jriddler.attrs;
 
-import com.jriddler.attrs.*;
-
 import java.sql.Types;
 
 /**
@@ -17,6 +15,7 @@ public final class DefinitionFactory {
      * @param name   Name
      * @return Attribute definition
      */
+    @SuppressWarnings("ReturnCount")
     public AttributeDefinition create(
             final int type,
             final int length,

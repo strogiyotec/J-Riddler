@@ -11,33 +11,50 @@ import java.time.OffsetDateTime;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
+/**
+ * Base class that gives access to db.
+ */
 public abstract class DbTest {
 
     static {
-        // Postgres JDBC driver uses JUL; disable it to avoid annoying, irrelevant, stderr logs during connection testing
+        // Postgres JDBC driver uses JUL; disable it to avoid annoying,
+        // irrelevant, stderr logs during connection testing
         LogManager.getLogManager().getLogger("").setLevel(Level.OFF);
     }
 
+    /**
+     * Postgres.
+     */
     @ClassRule
-    public static final PostgreSQLContainer CONTAINER = new PostgreSQLContainer("postgres:11.1")
+    public static final PostgreSQLContainer CONTAINER =
+            new PostgreSQLContainer("postgres:11.1")
             .withDatabaseName("test")
             .withUsername("test")
             .withPassword("test");
 
 
+    /**
+     * Current date.
+     */
     static final OffsetDateTime NOW = OffsetDateTime.now();
 
-    static DataSource DATASOURCE;
+    /**
+     * Data source.
+     */
+    static DataSource datasource;
 
+    /**
+     * Init.
+     */
     @BeforeClass
     public static void initClass() {
         final PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUrl(CONTAINER.getJdbcUrl());
         dataSource.setUser(CONTAINER.getUsername());
         dataSource.setPassword(CONTAINER.getPassword());
-        DATASOURCE = dataSource;
+        datasource = dataSource;
         Flyway.configure()
-                .dataSource(DATASOURCE)
+                .dataSource(datasource)
                 .load()
                 .migrate();
     }

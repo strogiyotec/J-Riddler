@@ -11,12 +11,25 @@ import org.junit.Test;
 import java.sql.*;
 import java.util.Arrays;
 
+/**
+ * Test sql insert.
+ */
+@SuppressWarnings("MagicNumber")
 public final class SqlInsertTest extends DbTest {
 
+    /**
+     * User data.
+     */
     private User user;
 
+    /**
+     * Sql operation to test.
+     */
     private SqlOperation<Boolean> sqlOperation;
 
+    /**
+     * Init.
+     */
     @Before
     public void init() {
         this.user = new User(
@@ -28,7 +41,7 @@ public final class SqlInsertTest extends DbTest {
                 true
         );
         this.sqlOperation = new SqlInsert(
-                DATASOURCE,
+                datasource,
                 Arrays.asList(
                         new IntAttr("age", this.user.getAge()),
                         new VarCharAttr("name", 6, this.user.getName()),
@@ -41,12 +54,23 @@ public final class SqlInsertTest extends DbTest {
         );
     }
 
+    /**
+     * Test insert query.
+     *
+     * @throws SQLException if failed
+     */
     @Test
+    @SuppressWarnings("LineLength")
     public void testSqlInsert() throws SQLException {
         Assert.assertFalse(this.sqlOperation.perform());
 
-        try (final Connection connection = DATASOURCE.getConnection()) {
-            try (final PreparedStatement statement = connection.prepareStatement("SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?")) {
+        try (final Connection connection = datasource.getConnection()) {
+            try (
+                    final PreparedStatement statement =
+                            connection.prepareStatement(
+                                    "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?"
+                            )
+            ) {
                 statement.setLong(1, 10);
                 try (final ResultSet set = statement.executeQuery()) {
                     while (set.next()) {

@@ -25,6 +25,7 @@ public final class IntAttr implements AttributeDefinition {
      *
      * @param name Column name
      */
+    @SuppressWarnings("MagicNumber")
     public IntAttr(final String name) {
         this(
                 name,

@@ -9,12 +9,25 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class InsertQueryTest {
+/**
+ * Test insert query.
+ */
+@SuppressWarnings("MagicNumber")
+public final class InsertQueryTest {
 
+    /**
+     * Table name.
+     */
     private static final String TABLE_NAME = "users";
 
+    /**
+     * Insert query.
+     */
     private InsertQuery insertQuery;
 
+    /**
+     * Init.
+     */
     @Before
     public void init() {
         final List<AttributeDefinition> definitions = Arrays.asList(
@@ -28,8 +41,11 @@ public class InsertQueryTest {
         this.insertQuery = new InsertQuery(definitions, TABLE_NAME);
     }
 
+    /**
+     * Test build.
+     */
     @Test
-    public void build() {
+    public void testBuild() {
         Assert.assertThat(
                 this.insertQuery.build(),
                 CoreMatchers.is(

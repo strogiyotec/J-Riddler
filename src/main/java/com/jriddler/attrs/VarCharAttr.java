@@ -26,9 +26,11 @@ public final class VarCharAttr implements AttributeDefinition {
 
     /**
      * Ctor that creates random string.
-     * @param name Column name
+     *
+     * @param name   Column name
      * @param length Varchar length
      */
+    @SuppressWarnings("MagicNumber")
     public VarCharAttr(final String name, final int length) {
         this.name = name;
         if (length == Integer.MAX_VALUE) {
@@ -36,7 +38,12 @@ public final class VarCharAttr implements AttributeDefinition {
         } else {
             this.length = length;
         }
-        this.value = new Faker().regexify(String.format("[a-z1-9]{%d}", this.length));
+        this.value = new Faker().regexify(
+                String.format(
+                        "[a-z1-9]{%d}",
+                        this.length
+                )
+        );
     }
 
     @Override

@@ -25,6 +25,7 @@ public final class BigIntAttr implements AttributeDefinition {
      *
      * @param name Column name
      */
+    @SuppressWarnings("MagicNumber")
     public BigIntAttr(final String name) {
         this(
                 name,
