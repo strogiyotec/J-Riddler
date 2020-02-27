@@ -4,13 +4,27 @@ import lombok.AllArgsConstructor;
 
 import java.time.OffsetDateTime;
 
+/**
+ * Timestamp with time zone attr.
+ */
 @AllArgsConstructor
 public final class TimeStampAttr implements AttributeDefinition {
 
+    /**
+     * Name.
+     */
     private final String name;
 
+    /**
+     * Value.
+     */
     private final OffsetDateTime value;
 
+    /**
+     * Ctor that creates current time value.
+     *
+     * @param name Column name
+     */
     public TimeStampAttr(final String name) {
         this(
                 name,
@@ -25,7 +39,7 @@ public final class TimeStampAttr implements AttributeDefinition {
 
     @Override
     public int size() {
-        return 0;
+        return 35;
     }
 
     @Override

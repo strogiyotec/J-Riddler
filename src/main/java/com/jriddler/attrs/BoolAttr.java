@@ -4,13 +4,26 @@ import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Bool attr.
+ */
 @AllArgsConstructor
 public final class BoolAttr implements AttributeDefinition {
 
+    /**
+     * Name.
+     */
     private final String name;
 
+    /**
+     * Value.
+     */
     private final boolean value;
 
+    /**
+     * Ctor that creates random value.
+     * @param name Column name
+     */
     public BoolAttr(final String name) {
         this(
                 name,

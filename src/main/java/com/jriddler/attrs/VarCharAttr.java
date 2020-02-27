@@ -3,15 +3,32 @@ package com.jriddler.attrs;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 
+/**
+ * Varchar attr.
+ */
 @AllArgsConstructor
 public final class VarCharAttr implements AttributeDefinition {
 
+    /**
+     * Name.
+     */
     private final String name;
 
+    /**
+     * Var char length.
+     */
     private final int length;
 
+    /**
+     * Value.
+     */
     private final String value;
 
+    /**
+     * Ctor that creates random string.
+     * @param name Column name
+     * @param length Varchar length
+     */
     public VarCharAttr(final String name, final int length) {
         this.name = name;
         if (length == Integer.MAX_VALUE) {

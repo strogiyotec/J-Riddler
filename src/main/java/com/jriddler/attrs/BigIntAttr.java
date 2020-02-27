@@ -4,13 +4,27 @@ import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Big integer attr.
+ */
 @AllArgsConstructor
 public final class BigIntAttr implements AttributeDefinition {
 
+    /**
+     * Name.
+     */
     private final String name;
 
+    /**
+     * Value.
+     */
     private final long value;
 
+    /**
+     * Ctor that create random value.
+     *
+     * @param name Column name
+     */
     public BigIntAttr(final String name) {
         this(
                 name,
@@ -25,7 +39,7 @@ public final class BigIntAttr implements AttributeDefinition {
 
     @Override
     public int size() {
-        return 8;
+        return Long.BYTES;
     }
 
     @Override
