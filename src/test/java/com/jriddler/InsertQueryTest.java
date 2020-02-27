@@ -1,5 +1,6 @@
 package com.jriddler;
 
+import com.jriddler.attrs.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

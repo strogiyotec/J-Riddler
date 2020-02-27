@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.attrs;
 
 import lombok.AllArgsConstructor;
 
@@ -34,8 +34,4 @@ public final class IntAttr implements AttributeDefinition {
         return this.name;
     }
 
-    @Override
-    public DefinitionType type() {
-        return DefinitionType.NUMBER;
-    }
 }

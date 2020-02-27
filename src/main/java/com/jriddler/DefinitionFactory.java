@@ -1,5 +1,7 @@
 package com.jriddler;
 
+import com.jriddler.attrs.*;
+
 import java.sql.Types;
 
 public final class DefinitionFactory {

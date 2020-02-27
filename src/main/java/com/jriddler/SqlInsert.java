@@ -1,5 +1,6 @@
 package com.jriddler;
 
+import com.jriddler.attrs.AttributeDefinition;
 import lombok.AllArgsConstructor;
 
 import javax.sql.DataSource;

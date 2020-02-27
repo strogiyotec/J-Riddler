@@ -1,5 +1,7 @@
 package com.jriddler;
 
+import com.jriddler.attrs.AttributeDefinition;
+
 import java.sql.*;
 
 /**

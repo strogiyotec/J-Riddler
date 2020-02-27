@@ -1,31 +1,31 @@
-package com.jriddler;
+package com.jriddler.attrs;
 
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 @AllArgsConstructor
-public final class BoolAttr implements AttributeDefinition {
+public final class BigIntAttr implements AttributeDefinition {
 
     private final String name;
 
-    private final boolean value;
+    private final long value;
 
-    public BoolAttr(final String name) {
+    public BigIntAttr(final String name) {
         this(
                 name,
-                ThreadLocalRandom.current().nextBoolean()
+                ThreadLocalRandom.current().nextLong(0, 10)
         );
     }
 
     @Override
-    public Boolean value() {
+    public Long value() {
         return this.value;
     }
 
     @Override
     public int size() {
-        return 1;
+        return 8;
     }
 
     @Override
@@ -33,8 +33,4 @@ public final class BoolAttr implements AttributeDefinition {
         return this.name;
     }
 
-    @Override
-    public DefinitionType type() {
-        return DefinitionType.NUMBER;
-    }
 }

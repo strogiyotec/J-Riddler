@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.attrs;
 
 import lombok.AllArgsConstructor;
 
@@ -31,10 +31,5 @@ public final class TimeStampAttr implements AttributeDefinition {
     @Override
     public String name() {
         return this.name;
-    }
-
-    @Override
-    public DefinitionType type() {
-        return DefinitionType.STRING;
     }
 }
