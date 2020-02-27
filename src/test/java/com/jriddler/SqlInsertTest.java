@@ -1,6 +1,8 @@
 package com.jriddler;
 
 import com.jriddler.attrs.*;
+import com.jriddler.sql.SqlInsert;
+import com.jriddler.sql.SqlOperation;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

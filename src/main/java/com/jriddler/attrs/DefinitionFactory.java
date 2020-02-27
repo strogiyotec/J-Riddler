@@ -1,12 +1,27 @@
-package com.jriddler;
+package com.jriddler.attrs;
 
 import com.jriddler.attrs.*;
 
 import java.sql.Types;
 
+/**
+ * Creates attribute definition.
+ */
 public final class DefinitionFactory {
 
-    public AttributeDefinition create(final int type, final int length, final String name) {
+    /**
+     * Create definition from given params.
+     *
+     * @param type   Type
+     * @param length Size
+     * @param name   Name
+     * @return Attribute definition
+     */
+    public AttributeDefinition create(
+            final int type,
+            final int length,
+            final String name
+    ) {
         if (type == Types.INTEGER) {
             return new IntAttr(name);
         }

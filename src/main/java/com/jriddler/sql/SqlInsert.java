@@ -1,5 +1,6 @@
-package com.jriddler;
+package com.jriddler.sql;
 
+import com.jriddler.InsertQuery;
 import com.jriddler.attrs.AttributeDefinition;
 import lombok.AllArgsConstructor;
 
@@ -9,13 +10,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Executes insert query.
+ */
 @AllArgsConstructor
 public final class SqlInsert implements SqlOperation<Boolean> {
 
+    /**
+     * Data source.
+     */
     private final DataSource dataSource;
 
+    /**
+     * List of attrs.
+     */
     private final List<AttributeDefinition> definitions;
 
+    /**
+     * Table name.
+     */
     private final String tableName;
 
     @Override
@@ -30,6 +43,11 @@ public final class SqlInsert implements SqlOperation<Boolean> {
         }
     }
 
+    /**
+     * Create insert query.
+     *
+     * @return Insert query
+     */
     private String query() {
         return new InsertQuery(this.definitions, this.tableName).build();
     }
