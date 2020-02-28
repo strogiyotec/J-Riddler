@@ -1,9 +1,11 @@
 package com.jriddler;
 
 import org.flywaydb.core.Flyway;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
@@ -28,9 +30,9 @@ public abstract class DbTest {
     @ClassRule
     public static final PostgreSQLContainer CONTAINER =
             new PostgreSQLContainer("postgres:11.1")
-            .withDatabaseName("test")
-            .withUsername("test")
-            .withPassword("test");
+                    .withDatabaseName("test")
+                    .withUsername("test")
+                    .withPassword("test");
 
 
     /**
@@ -41,7 +43,13 @@ public abstract class DbTest {
     /**
      * Data source.
      */
-    static DataSource datasource;
+    private static DataSource datasource;
+
+    /**
+     * Jdbc template.
+     */
+    @SuppressWarnings("VisibilityModifier")
+    protected JdbcTemplate jdbcTemplate;
 
     /**
      * Init.
@@ -57,6 +65,14 @@ public abstract class DbTest {
                 .dataSource(datasource)
                 .load()
                 .migrate();
+    }
+
+    /**
+     * Create jdbc template.
+     */
+    @Before
+    public final void initJdbc() {
+        this.jdbcTemplate = new JdbcTemplate(datasource);
     }
 
 

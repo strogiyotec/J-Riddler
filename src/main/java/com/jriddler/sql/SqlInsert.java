@@ -3,23 +3,21 @@ package com.jriddler.sql;
 import com.jriddler.InsertQuery;
 import com.jriddler.attrs.AttributeDefinition;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Executes insert query.
  */
 @AllArgsConstructor
-public final class SqlInsert implements SqlOperation<Boolean> {
+public final class SqlInsert implements SqlOperation<Integer> {
 
     /**
-     * Data source.
+     * Jdbc template.
      */
-    private final DataSource dataSource;
+    private final JdbcTemplate template;
 
     /**
      * List of attrs.
@@ -31,19 +29,32 @@ public final class SqlInsert implements SqlOperation<Boolean> {
      */
     private final String tableName;
 
+    /**
+     * Ctor.
+     *
+     * @param dataSource  Source
+     * @param definitions Definitions
+     * @param tableName   Table name
+     */
+    public SqlInsert(
+            final DataSource dataSource,
+            final List<AttributeDefinition> definitions,
+            final String tableName
+    ) {
+        this.template = new JdbcTemplate(dataSource);
+        this.definitions = definitions;
+        this.tableName = tableName;
+    }
+
     @Override
-    public Boolean perform() throws SQLException {
-        try (final Connection connection = this.dataSource.getConnection()) {
-            try (
-                    final PreparedStatement statement =
-                            connection.prepareStatement(this.query())
-            ) {
-                for (int i = 1; i <= this.definitions.size(); i++) {
-                    statement.setObject(i, this.definitions.get(i - 1).value());
-                }
-                return statement.execute();
-            }
-        }
+    public Integer perform() {
+        return this.template.update(
+                this.query(),
+                this.definitions
+                        .stream()
+                        .map(AttributeDefinition::value)
+                        .toArray()
+        );
     }
 
     /**

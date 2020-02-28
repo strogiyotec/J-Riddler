@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.*;
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
@@ -25,7 +25,7 @@ public final class SqlInsertTest extends DbTest {
     /**
      * Sql operation to test.
      */
-    private SqlOperation<Boolean> sqlOperation;
+    private SqlOperation<Integer> sqlOperation;
 
     /**
      * Init.
@@ -41,7 +41,7 @@ public final class SqlInsertTest extends DbTest {
                 true
         );
         this.sqlOperation = new SqlInsert(
-                datasource,
+                this.jdbcTemplate,
                 Arrays.asList(
                         new IntAttr("age", this.user.getAge()),
                         new VarCharAttr("name", 6, this.user.getName()),
@@ -56,51 +56,50 @@ public final class SqlInsertTest extends DbTest {
 
     /**
      * Test insert query.
-     *
-     * @throws SQLException if failed
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testSqlInsert() throws SQLException {
-        Assert.assertFalse(this.sqlOperation.perform());
-
-        try (final Connection connection = datasource.getConnection()) {
-            try (
-                    final PreparedStatement statement =
-                            connection.prepareStatement(
-                                    "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?"
-                            )
-            ) {
-                statement.setLong(1, 10);
-                try (final ResultSet set = statement.executeQuery()) {
-                    while (set.next()) {
-                        Assert.assertThat(
-                                set.getInt(1),
-                                CoreMatchers.is(this.user.getAge())
-                        );
-                        Assert.assertThat(
-                                set.getString(2),
-                                CoreMatchers.is(this.user.getName())
-                        );
-                        Assert.assertThat(
-                                set.getString(3),
-                                CoreMatchers.is(this.user.getSurname())
-                        );
-                        Assert.assertThat(
-                                set.getBoolean(4),
-                                CoreMatchers.is(this.user.isActive())
-                        );
-                        Assert.assertThat(
-                                set.getTimestamp(5).getTime(),
-                                CoreMatchers.is(Timestamp.valueOf(this.user.getBirthday().toLocalDateTime()).getTime())
-                        );
-                        Assert.assertThat(
-                                set.getLong(6),
-                                CoreMatchers.is(this.user.getId())
-                        );
-                    }
-                }
-            }
-        }
+    public void testSqlInsert() {
+        Assert.assertThat(
+                this.sqlOperation.perform(),
+                CoreMatchers.is(1)
+        );
+        final User dbUser = this.jdbcTemplate.queryForObject(
+                "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?",
+                User::mapRow,
+                this.user.getId()
+        );
+        Assert.assertThat(
+                dbUser.getAge(),
+                CoreMatchers.is(this.user.getAge())
+        );
+        Assert.assertThat(
+                dbUser.getName(),
+                CoreMatchers.is(this.user.getName())
+        );
+        Assert.assertThat(
+                dbUser.getSurname(),
+                CoreMatchers.is(this.user.getSurname())
+        );
+        Assert.assertThat(
+                dbUser.isActive(),
+                CoreMatchers.is(this.user.isActive())
+        );
+        Assert.assertThat(
+                Timestamp.valueOf(
+                        dbUser.getBirthday()
+                                .toLocalDateTime()
+                ).getTime(),
+                CoreMatchers.is(
+                        Timestamp.valueOf(
+                                this.user.getBirthday()
+                                        .toLocalDateTime()
+                        ).getTime()
+                )
+        );
+        Assert.assertThat(
+                dbUser.getId(),
+                CoreMatchers.is(this.user.getId())
+        );
     }
 }
