@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.sql;
 
 import org.flywaydb.core.Flyway;
 import org.junit.Before;

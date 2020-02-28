@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.sql;
 
 
 import lombok.AllArgsConstructor;
