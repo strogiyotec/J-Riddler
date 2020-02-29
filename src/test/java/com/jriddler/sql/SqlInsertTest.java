@@ -63,7 +63,7 @@ public final class SqlInsertTest extends DbTest {
                 CoreMatchers.is(1)
         );
         final User dbUser = this.jdbcTemplate.queryForObject(
-                "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ?",
+                "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",
                 User::mapRow,
                 this.user.getId()
         );

@@ -17,7 +17,6 @@ import static java.time.ZoneId.systemDefault;
  */
 @AllArgsConstructor
 @Getter
-@SuppressWarnings("MagicNumber")
 final class User {
     /**
      * Name.
@@ -65,7 +64,7 @@ final class User {
                 resultSet.getString("name"),
                 resultSet.getString("surname"),
                 ofInstant(
-                        ofEpochMilli(resultSet.getTimestamp(5).getTime()),
+                        ofEpochMilli(resultSet.getTimestamp("birthday").getTime()),
                         systemDefault()
                 ),
                 resultSet.getInt("age"),
