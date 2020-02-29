@@ -64,7 +64,9 @@ final class User {
                 resultSet.getString("name"),
                 resultSet.getString("surname"),
                 ofInstant(
-                        ofEpochMilli(resultSet.getTimestamp("birthday").getTime()),
+                        ofEpochMilli(
+                                resultSet.getTimestamp("birthday").getTime()
+                        ),
                         systemDefault()
                 ),
                 resultSet.getInt("age"),
