@@ -1,11 +1,30 @@
 package com.jriddler.attrs;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 
 /**
  * Creates attribute definition.
  */
 public final class DefinitionFactory {
+
+    /**
+     * Create attribute definition from result set.
+     *
+     * @param resultSet ResultSet
+     * @return Attr definition
+     * @throws SQLException If fails
+     */
+    public AttributeDefinition create(
+            final ResultSet resultSet
+    ) throws SQLException {
+        return this.create(
+                resultSet.getInt("DATA_TYPE"),
+                resultSet.getInt("COLUMN_SIZE"),
+                resultSet.getString("COLUMN_NAME")
+        );
+    }
 
     /**
      * Create definition from given params.
@@ -36,7 +55,12 @@ public final class DefinitionFactory {
         if (type == Types.TIMESTAMP) {
             return new TimeStampAttr(name);
         }
-        throw new IllegalArgumentException("bla");
+        throw new IllegalArgumentException(
+                String.format(
+                        "Attribute with name %s is not suported",
+                        name
+                )
+        );
 
     }
 }
