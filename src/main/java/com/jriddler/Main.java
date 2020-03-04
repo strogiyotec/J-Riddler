@@ -1,7 +1,7 @@
 package com.jriddler;
 
 import com.jriddler.attrs.AttributeDefinition;
-import com.jriddler.attrs.DefinitionFactory;
+import com.jriddler.attrs.DynamicAttr;
 
 import java.sql.*;
 
@@ -10,12 +10,11 @@ import java.sql.*;
  */
 public final class Main {
     public static void main(final String[] args) throws SQLException {
-        final DefinitionFactory factory = new DefinitionFactory();
         final Connection connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/test", "postgres", "123");
         final DatabaseMetaData metaData = connection.getMetaData();
         try (final ResultSet resultSet = metaData.getColumns("public", null, "test", null)) {
             while (resultSet.next()) {
-                final AttributeDefinition definition = factory.create(
+                final AttributeDefinition definition = new DynamicAttr(
                         resultSet.getInt("DATA_TYPE"),
                         resultSet.getInt("COLUMN_SIZE"),
                         resultSet.getString("COLUMN_NAME")

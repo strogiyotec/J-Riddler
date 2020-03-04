@@ -2,10 +2,9 @@ package com.jriddler.attr;
 
 
 import com.jriddler.attrs.AttributeDefinition;
-import com.jriddler.attrs.DefinitionFactory;
+import com.jriddler.attrs.DynamicAttr;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Types;
@@ -15,20 +14,8 @@ import java.time.OffsetDateTime;
  * Test Definition factory.
  */
 @SuppressWarnings("MagicNumber")
-public final class DefinitionFactoryTest {
+public final class DynamicAttrTest {
 
-    /**
-     * Factory to test.
-     */
-    private DefinitionFactory factory;
-
-    /**
-     * Init.
-     */
-    @Before
-    public void init() {
-        this.factory = new DefinitionFactory();
-    }
 
     /**
      * Test create int attr.
@@ -36,7 +23,7 @@ public final class DefinitionFactoryTest {
     @Test
     public void testCreateInt() {
         Assert.assertThat(
-                this.factory.create(
+                new DynamicAttr(
                         Types.INTEGER,
                         4,
                         "age"
@@ -51,7 +38,7 @@ public final class DefinitionFactoryTest {
     @Test
     public void testCreateBigInt() {
         Assert.assertThat(
-                this.factory.create(
+                new DynamicAttr(
                         Types.BIGINT,
                         8,
                         "id"
@@ -66,7 +53,7 @@ public final class DefinitionFactoryTest {
     @Test
     public void testCreateBool() {
         Assert.assertThat(
-                this.factory.create(
+                new DynamicAttr(
                         Types.BIT,
                         1,
                         "active"
@@ -81,7 +68,7 @@ public final class DefinitionFactoryTest {
     @Test
     public void testCreateTimeStamp() {
         Assert.assertThat(
-                this.factory.create(
+                new DynamicAttr(
                         Types.TIMESTAMP,
                         35,
                         "birthday"
@@ -95,7 +82,7 @@ public final class DefinitionFactoryTest {
      */
     @Test
     public void testCreateString() {
-        final AttributeDefinition definition = this.factory.create(
+        final AttributeDefinition definition = new DynamicAttr(
                 Types.VARCHAR,
                 10,
                 "name"
@@ -108,5 +95,17 @@ public final class DefinitionFactoryTest {
                 definition.value().toString().length(),
                 CoreMatchers.is(10)
         );
+    }
+
+    /**
+     * Test that will fail cause given type id is not supported.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testUnSupportedType() {
+        new DynamicAttr(
+                Integer.MIN_VALUE,
+                100,
+                "test"
+        ).value();
     }
 }
