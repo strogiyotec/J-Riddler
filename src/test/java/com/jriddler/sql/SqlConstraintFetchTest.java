@@ -9,21 +9,35 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-public final class ConstraintDefTest extends DbTest {
+/**
+ * Test {@link SqlConstraintFetch}.
+ */
+@SuppressWarnings("MagicNumber")
+public final class SqlConstraintFetchTest extends DbTest {
 
-    private ConstraintDef constraintDef;
+    /**
+     * Sql constraint to test.
+     */
+    private SqlConstraintFetch sqlConstraint;
 
+    /**
+     * Init.
+     */
     @Before
     public void init() {
-        this.constraintDef = new ConstraintDef(
+        this.sqlConstraint = new SqlConstraintFetch(
                 "users",
                 this.jdbcTemplate
         );
     }
 
+    /**
+     * Test that constraints were matched by column name.
+     */
     @Test
-    public void testFetchConstraints(){
-        final Map<String, List<Constraint>> constraints = this.constraintDef.perform();
+    public void testFetchConstraints() {
+        final Map<String, List<Constraint>> constraints =
+                this.sqlConstraint.perform();
         Assert.assertThat(
                 constraints.get("id").get(0).name(),
                 CoreMatchers.is("users_pkey")

@@ -13,10 +13,17 @@ import java.util.stream.Collectors;
  * Get all constraints for specific table.
  */
 @AllArgsConstructor
-public final class ConstraintDef implements SqlOperation<Map<String, List<Constraint>>> {
+@SuppressWarnings("LineLength")
+public final class SqlConstraintFetch implements SqlOperation<Map<String, List<Constraint>>> {
 
+    /**
+     * Table name.
+     */
     private final String tableName;
 
+    /**
+     * Jdbc template.
+     */
     private final JdbcTemplate jdbcTemplate;
 
     /**
@@ -42,6 +49,11 @@ public final class ConstraintDef implements SqlOperation<Map<String, List<Constr
                 );
     }
 
+    /**
+     * Creates query that fetches constraints.
+     *
+     * @return Select query
+     */
     private String query() {
         return String.format(
                 String.join(

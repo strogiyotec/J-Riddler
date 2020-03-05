@@ -1,5 +1,8 @@
 package com.jriddler.contraint;
 
+/**
+ * Db constraint.
+ */
 public interface Constraint {
     /**
      * Constrains name.
