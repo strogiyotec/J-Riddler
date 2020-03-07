@@ -1,32 +1,58 @@
 package com.jriddler.attrs;
 
 
-import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.experimental.Delegate;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-@AllArgsConstructor
-public final class Attributes implements Iterable<AttributeDefinition> {
+/**
+ * List of table attributes.
+ */
+public final class Attributes implements List<AttributeDefinition> {
 
-    private final String tableName;
+    /**
+     * Actual list of attributes.
+     */
+    @Delegate
+    private final List<AttributeDefinition> attributes;
 
-    private final JdbcTemplate jdbcTemplate;
-
-    @Override
+    /**
+     * Ctor.
+     *
+     * @param tableName    Table with attributes
+     * @param jdbcTemplate JdbcTemplate to send sql query
+     */
     @SneakyThrows(SQLException.class)
-    public Iterator<AttributeDefinition> iterator() {
+    @SuppressWarnings("LineLength")
+    public Attributes(
+            final String tableName,
+            final JdbcTemplate jdbcTemplate
+    ) {
+        this.attributes = Attributes.fetchAttributesFromDb(tableName, jdbcTemplate);
+    }
+
+    /**
+     * Collect all table attributes into single list.
+     *
+     * @param tableName    Table name
+     * @param jdbcTemplate JdbcTemplate for sql
+     * @return List of attributes
+     * @throws SQLException if failed
+     */
+    @SuppressWarnings("LineLength")
+    private static List<AttributeDefinition> fetchAttributesFromDb(
+            final String tableName,
+            final JdbcTemplate jdbcTemplate
+    ) throws SQLException {
         final List<AttributeDefinition> attrs = new ArrayList<>(16);
-        try (final Connection connection = this.jdbcTemplate.getDataSource().getConnection()) {
-            final DatabaseMetaData metaData = connection.getMetaData();
-            try (final ResultSet columns = this.columnsMetaData(connection, metaData)) {
+        try (final Connection connection = jdbcTemplate.getDataSource().getConnection()) {
+            try (final ResultSet columns = Attributes.columnsMetaData(connection, tableName)) {
                 while (columns.next()) {
                     attrs.add(
                             new DynamicAttr(
@@ -39,17 +65,25 @@ public final class Attributes implements Iterable<AttributeDefinition> {
 
             }
         }
-        return attrs.iterator();
+        return attrs;
     }
 
-    private ResultSet columnsMetaData(
+    /**
+     * Create columns metadata.
+     *
+     * @param connection Connection
+     * @param tableName  Table name
+     * @return Columns metadata
+     * @throws SQLException if failed
+     */
+    private static ResultSet columnsMetaData(
             final Connection connection,
-            final DatabaseMetaData metaData
+            final String tableName
     ) throws SQLException {
-        return metaData.getColumns(
+        return connection.getMetaData().getColumns(
                 connection.getCatalog(),
                 connection.getSchema(),
-                this.tableName,
+                tableName,
                 null
         );
     }
