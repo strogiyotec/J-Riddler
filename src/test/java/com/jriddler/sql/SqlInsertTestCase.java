@@ -5,6 +5,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public final class SqlInsertTestCase extends TestDatabase {
     /**
      * Sql operation to test.
      */
-    private SqlOperation<Integer> sqlOperation;
+    private SqlOperation<KeyHolder> sqlOperation;
 
     /**
      * Init.
@@ -39,7 +40,6 @@ public final class SqlInsertTestCase extends TestDatabase {
                 true
         );
         this.sqlOperation = new SqlInsert(
-                this.jdbcTemplate,
                 Arrays.asList(
                         new IntAttr("age", this.user.getAge()),
                         new VarCharAttr("name", 6, this.user.getName()),
@@ -48,7 +48,12 @@ public final class SqlInsertTestCase extends TestDatabase {
                         new TimeStampAttr("birthday", this.user.getBirthday()),
                         new BigIntAttr("id", this.user.getId())
                 ),
-                "users"
+                new PrimaryKeys(
+                        "users",
+                        this.jdbcTemplate
+                ),
+                "users",
+                this.jdbcTemplate
         );
     }
 
@@ -59,8 +64,8 @@ public final class SqlInsertTestCase extends TestDatabase {
     @SuppressWarnings("LineLength")
     public void testSqlInsert() {
         Assert.assertThat(
-                this.sqlOperation.perform(),
-                CoreMatchers.is(1)
+                this.sqlOperation.perform().getKey(),
+                CoreMatchers.is(this.user.getId())
         );
         final User dbUser = this.jdbcTemplate.queryForObject(
                 "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",

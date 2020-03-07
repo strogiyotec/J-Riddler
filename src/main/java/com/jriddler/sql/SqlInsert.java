@@ -2,27 +2,31 @@ package com.jriddler.sql;
 
 import com.jriddler.InsertQuery;
 import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.attrs.Attributes;
+import com.jriddler.attrs.PrimaryKeys;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
-import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 /**
  * Executes insert query.
  */
 @AllArgsConstructor
-public final class SqlInsert implements SqlOperation<Integer> {
+public final class SqlInsert implements SqlOperation<KeyHolder> {
 
     /**
-     * Jdbc template.
+     * List of argc
      */
-    private final JdbcTemplate template;
+    private final List<AttributeDefinition> attrs;
 
     /**
-     * List of attrs.
+     * Primary keys.
      */
-    private final List<AttributeDefinition> definitions;
+    private final List<String> primaryKeys;
 
     /**
      * Table name.
@@ -30,31 +34,53 @@ public final class SqlInsert implements SqlOperation<Integer> {
     private final String tableName;
 
     /**
+     * Jdbc jdbcTemplate.
+     */
+    private final JdbcTemplate jdbcTemplate;
+
+    /**
      * Ctor.
      *
-     * @param dataSource  Source
-     * @param definitions Definitions
-     * @param tableName   Table name
+     * @param jdbcTemplate Jdbc template
+     * @param tableName    Table name
      */
     public SqlInsert(
-            final DataSource dataSource,
-            final List<AttributeDefinition> definitions,
+            final JdbcTemplate jdbcTemplate,
             final String tableName
     ) {
-        this.template = new JdbcTemplate(dataSource);
-        this.definitions = definitions;
+        this.attrs = new Attributes(
+                tableName,
+                jdbcTemplate
+        );
+        this.primaryKeys = new PrimaryKeys(
+                tableName,
+                jdbcTemplate
+        );
+        this.jdbcTemplate = jdbcTemplate;
         this.tableName = tableName;
     }
 
+    /**
+     * Execute sql and fetch inserted id.
+     *
+     * @return Inserted id
+     */
     @Override
-    public Integer perform() {
-        return this.template.update(
-                this.query(),
-                this.definitions
-                        .stream()
-                        .map(AttributeDefinition::value)
-                        .toArray()
+    public KeyHolder perform() {
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+        this.jdbcTemplate.update(
+                connection -> {
+                    final PreparedStatement statement = connection.prepareStatement(
+                            this.query(),
+                            this.primaryKeys.toArray(new String[0])
+                    );
+                    for (int i = 0; i < this.attrs.size(); i++) {
+                        statement.setObject(i + 1, this.attrs.get(i).value());
+                    }
+                    return statement;
+                }, keyHolder
         );
+        return keyHolder;
     }
 
     /**
@@ -63,6 +89,9 @@ public final class SqlInsert implements SqlOperation<Integer> {
      * @return Insert query
      */
     private String query() {
-        return new InsertQuery(this.definitions, this.tableName).build();
+        return new InsertQuery(
+                this.attrs,
+                this.tableName
+        ).build();
     }
 }
