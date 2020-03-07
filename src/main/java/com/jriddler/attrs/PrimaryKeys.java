@@ -43,6 +43,7 @@ public final class PrimaryKeys implements List<String> {
      * @return Primary keys
      * @throws SQLException if failed
      */
+    @SuppressWarnings("LineLength")
     private static List<String> primaryKeysMeta(
             final String tableName,
             final JdbcTemplate jdbcTemplate

@@ -19,7 +19,7 @@ import java.util.List;
 public final class SqlInsert implements SqlOperation<KeyHolder> {
 
     /**
-     * List of argc
+     * List of argc.
      */
     private final List<AttributeDefinition> attrs;
 
@@ -66,6 +66,7 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
      * @return Inserted id
      */
     @Override
+    @SuppressWarnings("LineLength")
     public KeyHolder perform() {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         this.jdbcTemplate.update(
