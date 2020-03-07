@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Test sql insert.
  */
 @SuppressWarnings("MagicNumber")
-public final class SqlInsertTest extends DbTest {
+public final class SqlInsertTestCase extends TestDatabase {
 
     /**
      * User data.

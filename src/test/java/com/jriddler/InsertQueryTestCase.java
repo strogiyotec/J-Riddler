@@ -13,7 +13,7 @@ import java.util.List;
  * Test insert query.
  */
 @SuppressWarnings("MagicNumber")
-public final class InsertQueryTest {
+public final class InsertQueryTestCase {
 
     /**
      * Table name.

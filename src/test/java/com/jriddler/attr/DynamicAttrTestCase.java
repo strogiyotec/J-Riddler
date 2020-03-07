@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
  * Test Definition factory.
  */
 @SuppressWarnings("MagicNumber")
-public final class DynamicAttrTest {
+public final class DynamicAttrTestCase {
 
 
     /**

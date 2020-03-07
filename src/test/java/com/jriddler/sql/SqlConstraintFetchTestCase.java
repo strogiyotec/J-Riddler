@@ -13,7 +13,7 @@ import java.util.Map;
  * Test {@link SqlConstraintFetch}.
  */
 @SuppressWarnings("MagicNumber")
-public final class SqlConstraintFetchTest extends DbTest {
+public final class SqlConstraintFetchTestCase extends TestDatabase {
 
     /**
      * Sql constraint to test.

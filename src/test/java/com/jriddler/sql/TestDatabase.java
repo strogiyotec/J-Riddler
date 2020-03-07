@@ -16,7 +16,7 @@ import java.util.logging.LogManager;
 /**
  * Base class that gives access to db.
  */
-public abstract class DbTest {
+public abstract class TestDatabase {
 
     static {
         // Postgres JDBC driver uses JUL; disable it to avoid annoying,
