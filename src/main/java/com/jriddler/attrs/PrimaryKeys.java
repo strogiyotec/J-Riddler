@@ -32,7 +32,7 @@ public final class PrimaryKeys implements List<String> {
             final String tableName,
             final JdbcTemplate jdbcTemplate
     ) {
-        this.primaryKeys = PrimaryKeys.primaryKeysMeta(tableName, jdbcTemplate);
+        this.primaryKeys = PrimaryKeys.primaryKeys(tableName, jdbcTemplate);
     }
 
     /**
@@ -44,7 +44,7 @@ public final class PrimaryKeys implements List<String> {
      * @throws SQLException if failed
      */
     @SuppressWarnings("LineLength")
-    private static List<String> primaryKeysMeta(
+    private static List<String> primaryKeys(
             final String tableName,
             final JdbcTemplate jdbcTemplate
     ) throws SQLException {
