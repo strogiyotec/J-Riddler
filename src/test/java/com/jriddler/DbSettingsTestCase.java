@@ -27,6 +27,33 @@ public final class DbSettingsTestCase {
                         "-name", "postgres",
                         "-password", "123"
                 );
+        this.checkMainSettings(dbSettings);
+    }
+
+    /**
+     * Test that DbSettings set default values for host and port.
+     */
+    @Test
+    public void testDefaultSettingsParse() {
+        final DbSettings dbSettings = new DbSettings();
+        JCommander.newBuilder()
+                .addObject(dbSettings)
+                .build()
+                .parse(
+                        "-table", "users",
+                        "-name", "postgres",
+                        "-password", "123"
+                );
+        this.checkMainSettings(dbSettings);
+    }
+
+    /**
+     * Check DbSettings main params.
+     * Port,Host,User,Password,Table
+     *
+     * @param dbSettings DbSettings
+     */
+    private void checkMainSettings(final DbSettings dbSettings) {
         Assert.assertThat(
                 dbSettings.getPassword(),
                 CoreMatchers.is("123")

@@ -10,28 +10,33 @@ import lombok.Getter;
 public final class DbSettings {
 
     /**
-     * Table name.
+     * Default db port.
      */
-    @Parameter(names = "-table", description = "Table name")
-    private String table;
+    private static final int DEFAULT_PORT = 5432;
 
     /**
      * Db host.
      */
     @Parameter(names = "-host", description = "Database host")
-    private String dbHost;
+    private String dbHost = "localhost";
 
     /**
      * Db port.
      */
     @Parameter(names = "-port", description = "Database port")
-    private int port;
+    private int port = DEFAULT_PORT;
 
     /**
      * Db user.
      */
     @Parameter(names = "-name", description = "User name")
     private String username;
+
+    /**
+     * Table name.
+     */
+    @Parameter(names = "-table", description = "Table name")
+    private String table;
 
     /**
      * Db password.
