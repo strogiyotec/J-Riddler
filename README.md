@@ -19,3 +19,8 @@ Use this command to check your build
 ```
 mvn checkstyle:check test
 ```
+
+# Build and run
+
+1. Build project `mvn clean package`
+2. Run jar file with params `java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test`
