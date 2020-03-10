@@ -48,4 +48,10 @@ public final class DbSettings {
     )
     private String password;
 
+    /**
+     * Database name.
+     */
+    @Parameter(names = "-db", description = "Database name")
+    private String dbName;
+
 }
