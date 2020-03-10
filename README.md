@@ -24,3 +24,18 @@ mvn checkstyle:check test
 
 1. Build project `mvn clean package`
 2. Run jar file with params `java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test`
+
+# Example output 
+
+```
+INFO: New row for table [test] was created Params
+Attribute: id Value 9
+Attribute: active Value true
+Attribute: long_id Value 9
+Attribute: created Value 2020-03-10T15:27:53.348963-07:00
+Attribute: surname Value k7mir7lo97
+Attribute: age Value 9
+Attribute: sum Value 0
+Attribute: age2 Value 0
+
+```
