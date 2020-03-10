@@ -26,7 +26,7 @@ public final class DbSettingsTestCase {
                         "-port", "5432",
                         "-name", "postgres",
                         "-password", "123",
-                        "-db","test"
+                        "-db", "test"
                 );
         this.checkMainSettings(dbSettings);
     }
@@ -44,7 +44,7 @@ public final class DbSettingsTestCase {
                         "-table", "users",
                         "-name", "postgres",
                         "-password", "123",
-                        "-db","test"
+                        "-db", "test"
                 );
         this.checkMainSettings(dbSettings);
     }
