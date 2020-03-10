@@ -25,7 +25,8 @@ public final class DbSettingsTestCase {
                         "-host", "localhost",
                         "-port", "5432",
                         "-name", "postgres",
-                        "-password", "123"
+                        "-password", "123",
+                        "-db","test"
                 );
         this.checkMainSettings(dbSettings);
     }
@@ -42,14 +43,15 @@ public final class DbSettingsTestCase {
                 .parse(
                         "-table", "users",
                         "-name", "postgres",
-                        "-password", "123"
+                        "-password", "123",
+                        "-db","test"
                 );
         this.checkMainSettings(dbSettings);
     }
 
     /**
      * Check DbSettings main params.
-     * Port,Host,User,Password,Table
+     * Port,Host,User,Password,Table,DbName
      *
      * @param dbSettings DbSettings
      */
@@ -73,6 +75,10 @@ public final class DbSettingsTestCase {
         Assert.assertThat(
                 dbSettings.getTable(),
                 CoreMatchers.is("users")
+        );
+        Assert.assertThat(
+                dbSettings.getDbName(),
+                CoreMatchers.is("test")
         );
     }
 }
