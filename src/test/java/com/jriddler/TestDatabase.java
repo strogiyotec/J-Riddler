@@ -1,4 +1,4 @@
-package com.jriddler.sql;
+package com.jriddler;
 
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public abstract class TestDatabase {
     /**
      * Current date.
      */
-    static final OffsetDateTime NOW = OffsetDateTime.now();
+    public static final OffsetDateTime NOW = OffsetDateTime.now();
 
     /**
      * Data source.

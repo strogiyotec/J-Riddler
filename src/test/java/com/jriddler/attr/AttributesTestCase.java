@@ -2,7 +2,7 @@ package com.jriddler.attr;
 
 import com.jriddler.attrs.AttributeDefinition;
 import com.jriddler.attrs.Attributes;
-import com.jriddler.sql.TestDatabase;
+import com.jriddler.TestDatabase;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;

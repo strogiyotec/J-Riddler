@@ -1,5 +1,6 @@
 package com.jriddler.sql;
 
+import com.jriddler.TestDatabase;
 import com.jriddler.contraint.Constraint;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
