@@ -5,17 +5,21 @@ import com.jriddler.attrs.AttributeDefinition;
 import com.jriddler.attrs.Attributes;
 import com.jriddler.attrs.PrimaryKeys;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Executes insert query.
  */
 @AllArgsConstructor
+@Log
 public final class SqlInsert implements SqlOperation<KeyHolder> {
 
     /**
@@ -81,7 +85,29 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
                     return statement;
                 }, keyHolder
         );
+        this.logNewRow();
         return keyHolder;
+    }
+
+    /**
+     * Log attributes of new row.
+     */
+    private void logNewRow() {
+        log.log(
+                Level.INFO,
+                "New row for table [{0}] was created Params\n{1}",
+                new Object[]{
+                        this.tableName,
+                        this.attrs
+                                .stream()
+                                .map(attr -> String.format(
+                                        "Attribute: %s Value %s",
+                                        attr.name(),
+                                        attr.value()
+                                ))
+                                .collect(Collectors.joining("\n")),
+                }
+        );
     }
 
     /**
