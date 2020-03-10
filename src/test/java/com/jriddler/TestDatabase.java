@@ -1,6 +1,7 @@
 package com.jriddler;
 
 import org.flywaydb.core.Flyway;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -34,11 +35,10 @@ public abstract class TestDatabase {
                     .withUsername("test")
                     .withPassword("test");
 
-
     /**
      * Current date.
      */
-    public static final OffsetDateTime NOW = OffsetDateTime.now();
+    protected static final OffsetDateTime NOW = OffsetDateTime.now();
 
     /**
      * Data source.
@@ -60,7 +60,7 @@ public abstract class TestDatabase {
         dataSource.setUrl(CONTAINER.getJdbcUrl());
         dataSource.setUser(CONTAINER.getUsername());
         dataSource.setPassword(CONTAINER.getPassword());
-        datasource = dataSource;
+        TestDatabase.datasource = dataSource;
         Flyway.configure()
                 .dataSource(datasource)
                 .load()
@@ -73,6 +73,14 @@ public abstract class TestDatabase {
     @Before
     public final void initJdbc() {
         this.jdbcTemplate = new JdbcTemplate(datasource);
+    }
+
+    /**
+     * Clean table.
+     */
+    @After
+    public final void destroy() {
+        this.jdbcTemplate.update("DELETE FROM users");
     }
 
 
