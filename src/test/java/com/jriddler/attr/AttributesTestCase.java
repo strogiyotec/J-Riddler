@@ -22,7 +22,7 @@ public final class AttributesTestCase extends TestDbInstance {
     public void testAttributes() {
         final List<AttributeDefinition> attributes =
                 new Attributes(
-                        "managers",
+                        "users",
                         this.jdbcTemplate
                 );
         Assert.assertThat(
