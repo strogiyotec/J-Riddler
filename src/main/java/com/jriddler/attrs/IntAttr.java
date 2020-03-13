@@ -29,7 +29,7 @@ public final class IntAttr implements AttributeDefinition {
     public IntAttr(final String name) {
         this(
                 name,
-                ThreadLocalRandom.current().nextInt(0, 10)
+                ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)
         );
     }
 
