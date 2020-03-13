@@ -56,9 +56,7 @@ public final class Attributes implements List<AttributeDefinition> {
                 while (columns.next()) {
                     attrs.add(
                             new DynamicAttr(
-                                    columns.getInt("DATA_TYPE"),
-                                    columns.getInt("COLUMN_SIZE"),
-                                    columns.getString("COLUMN_NAME")
+                                    columns
                             )
                     );
                 }
