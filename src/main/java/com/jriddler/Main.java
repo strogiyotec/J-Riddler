@@ -33,22 +33,24 @@ public final class Main {
                 .addObject(dbSettings)
                 .build()
                 .parse(args);
+        final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
+                String.format(
+                        "jdbc:postgresql://%s:%d/%s",
+                        dbSettings.getDbHost(),
+                        dbSettings.getPort(),
+                        dbSettings.getDbName()
+                ),
+                dbSettings.getUsername(),
+                dbSettings.getPassword(),
+                true
+        );
         new SqlInsert(
                 new JdbcTemplate(
-                        new SingleConnectionDataSource(
-                                String.format(
-                                        "jdbc:postgresql://%s:%d/%s",
-                                        dbSettings.getDbHost(),
-                                        dbSettings.getPort(),
-                                        dbSettings.getDbName()
-                                ),
-                                dbSettings.getUsername(),
-                                dbSettings.getPassword(),
-                                true
-                        )
+                        dataSource
                 ),
                 dbSettings.getTable()
         ).perform();
+        dataSource.destroy();
     }
 
     /**
