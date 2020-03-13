@@ -1,6 +1,7 @@
 package com.jriddler;
 
 import com.beust.jcommander.JCommander;
+import com.jriddler.cli.UserInput;
 import com.jriddler.sql.SqlInsert;
 import lombok.extern.java.Log;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.cli;
 
 import com.beust.jcommander.Parameter;
 import lombok.Getter;

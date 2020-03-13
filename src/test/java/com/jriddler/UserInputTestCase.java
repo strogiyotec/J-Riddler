@@ -1,6 +1,7 @@
 package com.jriddler;
 
 import com.beust.jcommander.JCommander;
+import com.jriddler.cli.UserInput;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
