@@ -7,7 +7,7 @@ import lombok.Getter;
  * Db settings from cli.
  */
 @Getter
-public final class DbSettings {
+public final class UserInput {
 
     /**
      * Default db port.

@@ -6,19 +6,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for {@link DbSettings}.
+ * Test for {@link UserInput}.
  */
 @SuppressWarnings("MagicNumber")
-public final class DbSettingsTestCase {
+public final class UserInputTestCase {
 
     /**
-     * Test that DbSettings were created from argc.
+     * Test that UserInput was created from argc.
      */
     @Test
     public void testSettingsParse() {
-        final DbSettings dbSettings = new DbSettings();
+        final UserInput userInput = new UserInput();
         JCommander.newBuilder()
-                .addObject(dbSettings)
+                .addObject(userInput)
                 .build()
                 .parse(
                         "-table", "users",
@@ -28,17 +28,17 @@ public final class DbSettingsTestCase {
                         "-password", "123",
                         "-db", "test"
                 );
-        this.checkMainSettings(dbSettings);
+        this.checkMainSettings(userInput);
     }
 
     /**
-     * Test that DbSettings set default values for host and port.
+     * Test that UserInput sets default values for host and port.
      */
     @Test
     public void testDefaultSettingsParse() {
-        final DbSettings dbSettings = new DbSettings();
+        final UserInput userInput = new UserInput();
         JCommander.newBuilder()
-                .addObject(dbSettings)
+                .addObject(userInput)
                 .build()
                 .parse(
                         "-table", "users",
@@ -46,38 +46,38 @@ public final class DbSettingsTestCase {
                         "-password", "123",
                         "-db", "test"
                 );
-        this.checkMainSettings(dbSettings);
+        this.checkMainSettings(userInput);
     }
 
     /**
-     * Check DbSettings main params.
+     * Check UserInput main params.
      * Port,Host,User,Password,Table,DbName
      *
-     * @param dbSettings DbSettings
+     * @param userInput UserInput
      */
-    private void checkMainSettings(final DbSettings dbSettings) {
+    private void checkMainSettings(final UserInput userInput) {
         Assert.assertThat(
-                dbSettings.getPassword(),
+                userInput.getPassword(),
                 CoreMatchers.is("123")
         );
         Assert.assertThat(
-                dbSettings.getUsername(),
+                userInput.getUsername(),
                 CoreMatchers.is("postgres")
         );
         Assert.assertThat(
-                dbSettings.getDbHost(),
+                userInput.getDbHost(),
                 CoreMatchers.is("localhost")
         );
         Assert.assertThat(
-                dbSettings.getPort(),
+                userInput.getPort(),
                 CoreMatchers.is(5432)
         );
         Assert.assertThat(
-                dbSettings.getTable(),
+                userInput.getTable(),
                 CoreMatchers.is("users")
         );
         Assert.assertThat(
-                dbSettings.getDbName(),
+                userInput.getDbName(),
                 CoreMatchers.is("test")
         );
     }

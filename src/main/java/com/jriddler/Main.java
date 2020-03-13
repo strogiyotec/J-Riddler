@@ -28,28 +28,28 @@ public final class Main {
      */
     public static void main(final String[] args) {
         Main.setUpLogs();
-        final DbSettings dbSettings = new DbSettings();
+        final UserInput userInput = new UserInput();
         JCommander.newBuilder()
-                .addObject(dbSettings)
+                .addObject(userInput)
                 .build()
                 .parse(args);
         final SingleConnectionDataSource dataSource =
                 new SingleConnectionDataSource(
                         String.format(
                                 "jdbc:postgresql://%s:%d/%s",
-                                dbSettings.getDbHost(),
-                                dbSettings.getPort(),
-                                dbSettings.getDbName()
+                                userInput.getDbHost(),
+                                userInput.getPort(),
+                                userInput.getDbName()
                         ),
-                        dbSettings.getUsername(),
-                        dbSettings.getPassword(),
+                        userInput.getUsername(),
+                        userInput.getPassword(),
                         true
                 );
         new SqlInsert(
                 new JdbcTemplate(
                         dataSource
                 ),
-                dbSettings.getTable()
+                userInput.getTable()
         ).perform();
         dataSource.destroy();
     }
