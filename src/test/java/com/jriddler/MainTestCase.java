@@ -9,7 +9,7 @@ import static org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT;
 /**
  * Test {@link Main}.
  */
-public final class MainTestCase extends TestDatabase {
+public final class MainTestCase extends TestDbInstance {
 
     /**
      * Test that new row is created.

@@ -1,6 +1,6 @@
 package com.jriddler.sql;
 
-import com.jriddler.TestDatabase;
+import com.jriddler.TestDbInstance;
 import com.jriddler.attrs.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Test sql insert.
  */
 @SuppressWarnings("MagicNumber")
-public final class SqlInsertTestCase extends TestDatabase {
+public final class SqlInsertTestCase extends TestDbInstance {
 
     /**
      * User data.

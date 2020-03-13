@@ -17,7 +17,7 @@ import java.util.logging.LogManager;
 /**
  * Base class that gives access to db.
  */
-public abstract class TestDatabase {
+public abstract class TestDbInstance {
 
     static {
         // Postgres JDBC driver uses JUL; disable it to avoid annoying,
@@ -60,7 +60,7 @@ public abstract class TestDatabase {
         dataSource.setUrl(CONTAINER.getJdbcUrl());
         dataSource.setUser(CONTAINER.getUsername());
         dataSource.setPassword(CONTAINER.getPassword());
-        TestDatabase.datasource = dataSource;
+        TestDbInstance.datasource = dataSource;
         Flyway.configure()
                 .dataSource(datasource)
                 .load()

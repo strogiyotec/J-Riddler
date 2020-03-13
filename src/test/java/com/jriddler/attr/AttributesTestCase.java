@@ -2,7 +2,7 @@ package com.jriddler.attr;
 
 import com.jriddler.attrs.AttributeDefinition;
 import com.jriddler.attrs.Attributes;
-import com.jriddler.TestDatabase;
+import com.jriddler.TestDbInstance;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.util.List;
  * Test {@link Attributes}.
  */
 @SuppressWarnings("MagicNumber")
-public final class AttributesTestCase extends TestDatabase {
+public final class AttributesTestCase extends TestDbInstance {
 
     /**
      * Test that actual table attrs were fetched.

@@ -1,6 +1,6 @@
 package com.jriddler.sql;
 
-import com.jriddler.TestDatabase;
+import com.jriddler.TestDbInstance;
 import com.jriddler.contraint.Constraint;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Test {@link SqlConstraintFetch}.
  */
 @SuppressWarnings("MagicNumber")
-public final class SqlConstraintFetchTestCase extends TestDatabase {
+public final class SqlConstraintFetchTestCase extends TestDbInstance {
 
     /**
      * Sql constraint to test.
