@@ -3,11 +3,25 @@ package com.jriddler.cli;
 import com.beust.jcommander.Parameter;
 import lombok.Getter;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Db settings from cli.
  */
 @Getter
 public final class UserInput {
+
+    /**
+     * List of table attrs.
+     */
+    @SuppressWarnings("LineLength")
+    @Parameter(
+            names = "-attrs",
+            description = "Dynamic attributes to use during insert instead of random data",
+            listConverter = UserAttrConverter.class
+    )
+    private List<UserAttribute> userAttributes = Collections.emptyList();
 
     /**
      * Default db port.

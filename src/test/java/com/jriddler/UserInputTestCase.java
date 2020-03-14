@@ -30,6 +30,7 @@ public final class UserInputTestCase {
                         "-db", "test"
                 );
         this.checkMainSettings(userInput);
+        Assert.assertTrue(userInput.getUserAttributes().isEmpty());
     }
 
     /**
@@ -48,6 +49,34 @@ public final class UserInputTestCase {
                         "-db", "test"
                 );
         this.checkMainSettings(userInput);
+        Assert.assertTrue(userInput.getUserAttributes().isEmpty());
+    }
+
+    /**
+     * Test that dynamic attrs were created.
+     */
+    @Test
+    public void testDynamicTableAttrs() {
+        final UserInput userInput = new UserInput();
+        JCommander.newBuilder()
+                .addObject(userInput)
+                .build()
+                .parse(
+                        "-table", "users",
+                        "-name", "postgres",
+                        "-password", "123",
+                        "-db", "test",
+                        "-attrs", "user_name:Almas"
+                );
+        this.checkMainSettings(userInput);
+        Assert.assertThat(
+                userInput.getUserAttributes().get(0).getKey(),
+                CoreMatchers.is("user_name")
+        );
+        Assert.assertThat(
+                userInput.getUserAttributes().get(0).getValue(),
+                CoreMatchers.is("Almas")
+        );
     }
 
     /**
