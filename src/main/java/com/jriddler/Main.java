@@ -34,25 +34,51 @@ public final class Main {
                 .addObject(userInput)
                 .build()
                 .parse(args);
-        final SingleConnectionDataSource dataSource =
-                new SingleConnectionDataSource(
-                        String.format(
-                                "jdbc:postgresql://%s:%d/%s",
-                                userInput.getDbHost(),
-                                userInput.getPort(),
-                                userInput.getDbName()
-                        ),
-                        userInput.getUsername(),
-                        userInput.getPassword(),
-                        true
-                );
-        new SqlInsert(
-                new JdbcTemplate(
-                        dataSource
-                ),
-                userInput.getTable()
-        ).perform();
+        final SingleConnectionDataSource dataSource = Main.createDataSource(userInput);
+        Main.insertRandomRow(userInput, dataSource);
         dataSource.destroy();
+    }
+
+    /**
+     * Insert new random row.
+     *
+     * @param userInput  User Input
+     * @param dataSource Datasource
+     */
+    private static void insertRandomRow(
+            final UserInput userInput,
+            final SingleConnectionDataSource dataSource
+    ) {
+        if (userInput.getUserAttributes().isEmpty()) {
+            new SqlInsert(
+                    new JdbcTemplate(
+                            dataSource
+                    ),
+                    userInput.getTable()
+            ).perform();
+        }
+    }
+
+    /**
+     * Create one connection data source.
+     *
+     * @param userInput UserInput
+     * @return DataSource
+     */
+    private static SingleConnectionDataSource createDataSource(
+            final UserInput userInput
+    ) {
+        return new SingleConnectionDataSource(
+                String.format(
+                        "jdbc:postgresql://%s:%d/%s",
+                        userInput.getDbHost(),
+                        userInput.getPort(),
+                        userInput.getDbName()
+                ),
+                userInput.getUsername(),
+                userInput.getPassword(),
+                true
+        );
     }
 
     /**
