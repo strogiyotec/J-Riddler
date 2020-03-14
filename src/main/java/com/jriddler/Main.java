@@ -25,7 +25,7 @@ public final class Main {
     /**
      * Main.
      *
-     * @param args argc
+     * @param args Argc
      */
     public static void main(final String[] args) {
         Main.setUpLogs();
