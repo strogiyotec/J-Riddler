@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  * Convert input from user to list of dynamic attrs.
  */
 @SuppressWarnings("LineLength")
-public final class UserAttrConverter implements IStringConverter<List<UserAttribute>> {
+final class UserAttrConverter implements IStringConverter<List<UserAttribute>> {
     @Override
     public List<UserAttribute> convert(final String value) {
         final String[] attrs = value.split(",");
