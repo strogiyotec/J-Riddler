@@ -30,8 +30,8 @@ public final class IntAttr implements AttributeDefinition {
         this(
                 name,
                 ThreadLocalRandom.current().nextInt(
-                        Integer.MIN_VALUE,
-                        Integer.MAX_VALUE
+                        0,
+                        Integer.MAX_VALUE / 2
                 )
         );
     }
