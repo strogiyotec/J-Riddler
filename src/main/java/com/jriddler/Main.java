@@ -49,7 +49,15 @@ public final class Main {
             final UserInput userInput,
             final SingleConnectionDataSource dataSource
     ) {
-        if (userInput.getUserAttributes().isEmpty()) {
+        if (!userInput.getUserAttributes().isEmpty()) {
+            new SqlInsert(
+                    new JdbcTemplate(
+                            dataSource
+                    ),
+                    userInput.getTable(),
+                    userInput.getUserAttributes()
+            ).perform();
+        } else {
             new SqlInsert(
                     new JdbcTemplate(
                             dataSource

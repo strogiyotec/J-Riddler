@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.cli;
 
 import com.beust.jcommander.JCommander;
 import com.jriddler.cli.UserInput;

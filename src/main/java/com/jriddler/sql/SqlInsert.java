@@ -4,6 +4,7 @@ import com.jriddler.InsertQuery;
 import com.jriddler.attrs.AttributeDefinition;
 import com.jriddler.attrs.Attributes;
 import com.jriddler.attrs.PrimaryKeys;
+import com.jriddler.cli.UserAttribute;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -52,9 +54,29 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
             final JdbcTemplate jdbcTemplate,
             final String tableName
     ) {
+        this(
+                jdbcTemplate,
+                tableName,
+                Collections.emptyList()
+        );
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param jdbcTemplate   Jdbc template
+     * @param tableName      Table name
+     * @param userAttributes User defined attr values
+     */
+    public SqlInsert(
+            final JdbcTemplate jdbcTemplate,
+            final String tableName,
+            final List<UserAttribute> userAttributes
+    ) {
         this.attrs = new Attributes(
                 tableName,
-                jdbcTemplate
+                jdbcTemplate,
+                userAttributes
         );
         this.primaryKeys = new PrimaryKeys(
                 tableName,
