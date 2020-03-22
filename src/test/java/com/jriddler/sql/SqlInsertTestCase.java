@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Test sql insert.
@@ -44,7 +45,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
                 Arrays.asList(
                         new IntAttr("age", this.user.getAge()),
                         new VarCharAttr("name", 6, this.user.getName()),
-                        new VarCharAttr("surname", 6, this.user.getSurname()),
+                        new VarCharAttr("surname", 8, this.user.getSurname()),
                         new BoolAttr("active", this.user.isActive()),
                         new TimeStampAttr("birthday", this.user.getBirthday()),
                         new BigIntAttr("id", this.user.getId())
@@ -68,10 +69,12 @@ public final class SqlInsertTestCase extends TestDbInstance {
                 this.sqlOperation.perform().getKey(),
                 CoreMatchers.is(this.user.getId())
         );
-        final User dbUser = this.jdbcTemplate.queryForObject(
-                "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",
-                User::mapRow,
-                this.user.getId()
+        final User dbUser = Objects.requireNonNull(
+                this.jdbcTemplate.queryForObject(
+                        "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",
+                        User::mapRow,
+                        this.user.getId()
+                )
         );
         Assert.assertThat(
                 dbUser.getAge(),
