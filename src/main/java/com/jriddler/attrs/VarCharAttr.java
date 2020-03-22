@@ -1,12 +1,10 @@
 package com.jriddler.attrs;
 
 import com.github.javafaker.Faker;
-import lombok.AllArgsConstructor;
 
 /**
  * Varchar attr.
  */
-@AllArgsConstructor
 public final class VarCharAttr implements AttributeDefinition {
 
     /**
@@ -44,6 +42,26 @@ public final class VarCharAttr implements AttributeDefinition {
                         this.length
                 )
         );
+    }
+
+    public VarCharAttr(
+            final String name,
+            final int length,
+            final String value
+    ) {
+        if (value.length() > length) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Value [%s] for attr [%s] exceeded max length limit [%d]",
+                            value,
+                            name,
+                            length
+                    )
+            );
+        }
+        this.name = name;
+        this.length = length;
+        this.value = value;
     }
 
     @Override
