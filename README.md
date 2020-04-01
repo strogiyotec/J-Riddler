@@ -20,6 +20,17 @@ Use this command to check your build
 mvn checkstyle:check test
 ```
 
+# Supported types
+1. Text
+2. Varchar
+3. Timestamps
+4. Numbers (int,double precision)
+5. Boolean 
+
+# Features to be implemented
+1. If table has FK constraint then insert row in FK table
+2. Check value constraints (bigger than 0, min length etc.)
+
 # Build and run
 
 1. Build project `mvn clean package`
