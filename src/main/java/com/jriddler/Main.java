@@ -35,8 +35,11 @@ public final class Main {
                 .build()
                 .parse(args);
         final SingleConnectionDataSource dataSource = Main.createDataSource(userInput);
-        Main.insertRandomRow(userInput, dataSource);
-        dataSource.destroy();
+        try {
+            Main.insertRandomRow(userInput, dataSource);
+        } finally {
+            dataSource.destroy();
+        }
     }
 
     /**
@@ -49,22 +52,13 @@ public final class Main {
             final UserInput userInput,
             final SingleConnectionDataSource dataSource
     ) {
-        if (!userInput.getUserAttributes().isEmpty()) {
-            new SqlInsert(
-                    new JdbcTemplate(
-                            dataSource
-                    ),
-                    userInput.getTable(),
-                    userInput.getUserAttributes()
-            ).perform();
-        } else {
-            new SqlInsert(
-                    new JdbcTemplate(
-                            dataSource
-                    ),
-                    userInput.getTable()
-            ).perform();
-        }
+        new SqlInsert(
+                new JdbcTemplate(
+                        dataSource
+                ),
+                userInput.getTable(),
+                userInput.getUserAttributes()
+        ).perform();
     }
 
     /**
