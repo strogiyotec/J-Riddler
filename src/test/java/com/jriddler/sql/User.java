@@ -3,6 +3,7 @@ package com.jriddler.sql;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,29 +50,26 @@ final class User {
     private final boolean active;
 
     /**
-     * Create user from rowMapper.
-     *
-     * @param resultSet ResultSet
-     * @param rowNum    Rows
-     * @return User
-     * @throws SQLException if failed
+     * Row Mapper for {@link User}.
      */
-    public static User mapRow(
-            final ResultSet resultSet,
-            final int rowNum
-    ) throws SQLException {
-        return new User(
-                resultSet.getString("name"),
-                resultSet.getString("surname"),
-                ofInstant(
-                        ofEpochMilli(
-                                resultSet.getTimestamp("birthday").getTime()
-                        ),
-                        systemDefault()
-                ),
-                resultSet.getInt("age"),
-                resultSet.getLong("id"),
-                resultSet.getBoolean("active")
-        );
+    public static class UserMapper implements RowMapper<User> {
+
+        @Override
+        public User mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
+            return new User(
+                    resultSet.getString("name"),
+                    resultSet.getString("surname"),
+                    ofInstant(
+                            ofEpochMilli(
+                                    resultSet.getTimestamp("birthday").getTime()
+                            ),
+                            systemDefault()
+                    ),
+                    resultSet.getInt("age"),
+                    resultSet.getLong("id"),
+                    resultSet.getBoolean("active")
+            );
+        }
+
     }
 }

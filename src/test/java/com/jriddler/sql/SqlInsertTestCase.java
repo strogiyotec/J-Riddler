@@ -72,7 +72,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
         final User dbUser = Objects.requireNonNull(
                 this.jdbcTemplate.queryForObject(
                         "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",
-                        User::mapRow,
+                        new User.UserMapper(),
                         this.user.getId()
                 )
         );
