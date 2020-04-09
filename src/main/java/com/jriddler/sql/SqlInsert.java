@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 public final class SqlInsert implements SqlOperation<KeyHolder> {
 
     /**
-     * List of argc.
+     * List of table attributes.
      */
-    private final List<AttributeDefinition> attrs;
+    private final List<AttributeDefinition> tableAttrs;
 
     /**
      * Primary keys.
      */
-    private final List<String> primaryKeys;
+    private final List<String> pkNames;
 
     /**
      * Table name.
@@ -73,12 +73,12 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
             final String tableName,
             final List<UserAttribute> userAttributes
     ) {
-        this.attrs = new Attributes(
+        this.tableAttrs = new Attributes(
                 tableName,
                 jdbcTemplate,
                 userAttributes
         );
-        this.primaryKeys = new PrimaryKeys(
+        this.pkNames = new PrimaryKeys(
                 tableName,
                 jdbcTemplate
         );
@@ -99,10 +99,12 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
                 connection -> {
                     final PreparedStatement statement = connection.prepareStatement(
                             this.query(),
-                            this.primaryKeys.toArray(new String[0])
+                            //in order to return generated values for primary keys
+                            this.pkNames.toArray(new String[0])
                     );
-                    for (int i = 0; i < this.attrs.size(); i++) {
-                        statement.setObject(i + 1, this.attrs.get(i).value());
+                    for (int i = 0; i < this.tableAttrs.size(); i++) {
+                        //because PreparedStatement expects index starting from 1
+                        statement.setObject(i + 1, this.tableAttrs.get(i).value());
                     }
                     return statement;
                 }, keyHolder
@@ -120,7 +122,7 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
                 "New row for table [{0}] was created Params\n{1}",
                 new Object[]{
                         this.tableName,
-                        this.attrs
+                        this.tableAttrs
                                 .stream()
                                 .map(attr -> String.format(
                                         "Attribute: %s Value %s",
@@ -139,7 +141,7 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
      */
     private String query() {
         return new InsertQuery(
-                this.attrs,
+                this.tableAttrs,
                 this.tableName
         ).build();
     }
