@@ -2,7 +2,7 @@ package com.jriddler.attr;
 
 
 import com.jriddler.attrs.AttributeDefinition;
-import com.jriddler.attrs.DynamicAttr;
+import com.jriddler.attrs.AttrBuilder;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
  * Test Definition factory.
  */
 @SuppressWarnings("MagicNumber")
-public final class DynamicAttrTestCase {
+public final class AttrBuilderTestCase {
 
 
     /**
@@ -23,7 +23,7 @@ public final class DynamicAttrTestCase {
     @Test
     public void testCreateInt() {
         Assert.assertThat(
-                new DynamicAttr(
+                new AttrBuilder(
                         Types.INTEGER,
                         4,
                         "age"
@@ -38,7 +38,7 @@ public final class DynamicAttrTestCase {
     @Test
     public void testCreateBigInt() {
         Assert.assertThat(
-                new DynamicAttr(
+                new AttrBuilder(
                         Types.BIGINT,
                         8,
                         "id"
@@ -53,7 +53,7 @@ public final class DynamicAttrTestCase {
     @Test
     public void testCreateBool() {
         Assert.assertThat(
-                new DynamicAttr(
+                new AttrBuilder(
                         Types.BIT,
                         1,
                         "active"
@@ -68,7 +68,7 @@ public final class DynamicAttrTestCase {
     @Test
     public void testCreateTimeStamp() {
         Assert.assertThat(
-                new DynamicAttr(
+                new AttrBuilder(
                         Types.TIMESTAMP,
                         35,
                         "birthday"
@@ -82,7 +82,7 @@ public final class DynamicAttrTestCase {
      */
     @Test
     public void testCreateString() {
-        final AttributeDefinition definition = new DynamicAttr(
+        final AttributeDefinition definition = new AttrBuilder(
                 Types.VARCHAR,
                 10,
                 "name"
@@ -102,7 +102,7 @@ public final class DynamicAttrTestCase {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testUnSupportedType() {
-        new DynamicAttr(
+        new AttrBuilder(
                 Integer.MIN_VALUE,
                 100,
                 "test"

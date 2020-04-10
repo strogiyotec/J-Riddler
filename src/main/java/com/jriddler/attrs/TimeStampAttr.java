@@ -14,6 +14,7 @@ public final class TimeStampAttr implements AttributeDefinition {
     /**
      * Default formatter for date from user CLI.
      */
+    @SuppressWarnings("LineLength")
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     /**

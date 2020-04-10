@@ -50,7 +50,7 @@ public final class MainTestCase extends TestDbInstance {
                         "-name", CONTAINER.getUsername(),
                         "-password", CONTAINER.getPassword(),
                         "-db", CONTAINER.getDatabaseName(),
-                        "-attrs", "name:Almas"
+                        "-attrs", "name:Almas",
                 }
         );
         final List<Map<String, Object>> users = this.jdbcTemplate.queryForList("SELECT * FROM users where name='Almas';");

@@ -10,9 +10,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Decorate definition created by ResultSet params.
+ * Build attr and store it in origin.
  */
-public final class DynamicAttr implements AttributeDefinition {
+public final class AttrBuilder implements AttributeDefinition {
 
     /**
      * Origin.
@@ -24,9 +24,10 @@ public final class DynamicAttr implements AttributeDefinition {
      * Ctor.
      *
      * @param resultSet ResultSet
+     * @param userAttrs User defined attribute values
      * @throws SQLException If fails
      */
-    public DynamicAttr(
+    public AttrBuilder(
             final ResultSet resultSet,
             final List<UserAttribute> userAttrs
     ) throws SQLException {
@@ -47,7 +48,7 @@ public final class DynamicAttr implements AttributeDefinition {
      * @param name   Name
      */
     @SuppressWarnings("ReturnCount")
-    public DynamicAttr(
+    public AttrBuilder(
             final int type,
             final int length,
             final String name
@@ -64,12 +65,13 @@ public final class DynamicAttr implements AttributeDefinition {
     /**
      * Ctor.
      *
-     * @param type   Type
-     * @param length Size
-     * @param name   Name
+     * @param type           Type
+     * @param length         Size
+     * @param name           Name
+     * @param userAttributes User defined attribute values
      */
-    @SuppressWarnings("ReturnCount")
-    public DynamicAttr(
+    @SuppressWarnings({"ReturnCount", "LineLength"})
+    public AttrBuilder(
             final int type,
             final int length,
             final String name,
@@ -78,12 +80,12 @@ public final class DynamicAttr implements AttributeDefinition {
         if (!userAttributes.isEmpty()) {
             final UserAttribute userAttribute = this.userAttr(name, userAttributes);
             if (userAttribute == null) {
-                this.origin = DynamicAttr.randomAttr(type, length, name);
+                this.origin = AttrBuilder.randomAttr(type, length, name);
             } else {
-                this.origin = DynamicAttr.userDefinedAttr(type, length, name, userAttribute.getValue());
+                this.origin = AttrBuilder.userDefinedAttr(type, length, name, userAttribute.getValue());
             }
         } else {
-            this.origin = DynamicAttr.randomAttr(type, length, name);
+            this.origin = AttrBuilder.randomAttr(type, length, name);
         }
     }
 
@@ -120,16 +122,17 @@ public final class DynamicAttr implements AttributeDefinition {
             final String name,
             final String value
     ) {
+        final AttributeDefinition attr;
         if (type == Types.INTEGER) {
-            return new IntAttr(name, Integer.parseInt(value));
+            attr = new IntAttr(name, Integer.parseInt(value));
         } else if (type == Types.VARCHAR) {
-            return new VarCharAttr(name, length, value);
+            attr = new VarCharAttr(name, length, value);
         } else if (type == Types.BIT) {
-            return new BoolAttr(name, Boolean.parseBoolean(value));
+            attr = new BoolAttr(name, Boolean.parseBoolean(value));
         } else if (type == Types.BIGINT) {
-            return new BigIntAttr(name);
+            attr = new BigIntAttr(name);
         } else if (type == Types.TIMESTAMP) {
-            return new TimeStampAttr(name, value);
+            attr = new TimeStampAttr(name, value);
         } else {
             throw new IllegalArgumentException(
                     String.format(
@@ -138,6 +141,7 @@ public final class DynamicAttr implements AttributeDefinition {
                     )
             );
         }
+        return attr;
     }
 
     /**
@@ -153,16 +157,17 @@ public final class DynamicAttr implements AttributeDefinition {
             final int length,
             final String name
     ) {
+        final AttributeDefinition attr;
         if (type == Types.INTEGER) {
-            return new IntAttr(name);
+            attr = new IntAttr(name);
         } else if (type == Types.VARCHAR) {
-            return new VarCharAttr(name, length);
+            attr = new VarCharAttr(name, length);
         } else if (type == Types.BIT) {
-            return new BoolAttr(name);
+            attr = new BoolAttr(name);
         } else if (type == Types.BIGINT) {
-            return new BigIntAttr(name);
+            attr = new BigIntAttr(name);
         } else if (type == Types.TIMESTAMP) {
-            return new TimeStampAttr(name);
+            attr = new TimeStampAttr(name);
         } else {
             throw new IllegalArgumentException(
                     String.format(
@@ -171,5 +176,6 @@ public final class DynamicAttr implements AttributeDefinition {
                     )
             );
         }
+        return attr;
     }
 }

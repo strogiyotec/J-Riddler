@@ -55,7 +55,10 @@ final class User {
     public static class UserMapper implements RowMapper<User> {
 
         @Override
-        public User mapRow(final ResultSet resultSet, final int rowNum) throws SQLException {
+        public User mapRow(
+                final ResultSet resultSet,
+                final int rowNum
+        ) throws SQLException {
             return new User(
                     resultSet.getString("name"),
                     resultSet.getString("surname"),
@@ -66,7 +69,7 @@ final class User {
                             systemDefault()
                     ),
                     resultSet.getInt("age"),
-                    resultSet.getLong("id"),
+                    resultSet.getLong("id:58"),
                     resultSet.getBoolean("active")
             );
         }

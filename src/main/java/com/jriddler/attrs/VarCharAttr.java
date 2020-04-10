@@ -44,6 +44,13 @@ public final class VarCharAttr implements AttributeDefinition {
         );
     }
 
+    /**
+     * Ctor.
+     * @param name Attr name
+     * @param length Attr length
+     * @param value Attr value
+     */
+    @SuppressWarnings("LineLength")
     public VarCharAttr(
             final String name,
             final int length,

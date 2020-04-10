@@ -27,6 +27,7 @@ public final class Main {
      *
      * @param args Argc
      */
+    @SuppressWarnings("LineLength")
     public static void main(final String[] args) {
         Main.setUpLogs();
         final UserInput userInput = new UserInput();
@@ -34,7 +35,7 @@ public final class Main {
                 .addObject(userInput)
                 .build()
                 .parse(args);
-        final SingleConnectionDataSource dataSource = Main.createDataSource(userInput);
+        final SingleConnectionDataSource dataSource = Main.dataSource(userInput);
         try {
             Main.insertRandomRow(userInput, dataSource);
         } finally {
@@ -67,7 +68,7 @@ public final class Main {
      * @param userInput UserInput
      * @return DataSource
      */
-    private static SingleConnectionDataSource createDataSource(
+    private static SingleConnectionDataSource dataSource(
             final UserInput userInput
     ) {
         return new SingleConnectionDataSource(
