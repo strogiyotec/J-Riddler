@@ -61,7 +61,6 @@ public final class AttrBuilder implements AttributeDefinition {
         );
     }
 
-
     /**
      * Ctor.
      *
