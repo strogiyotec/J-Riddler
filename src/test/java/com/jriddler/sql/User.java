@@ -69,7 +69,7 @@ final class User {
                             systemDefault()
                     ),
                     resultSet.getInt("age"),
-                    resultSet.getLong("id:58"),
+                    resultSet.getLong("id"),
                     resultSet.getBoolean("active")
             );
         }
