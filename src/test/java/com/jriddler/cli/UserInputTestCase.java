@@ -65,15 +65,11 @@ public final class UserInputTestCase {
                         "-name", "postgres",
                         "-password", "123",
                         "-db", "test",
-                        "-attrs", "user_name:Almas"
+                        "-UAuser_name=Almas"
                 );
         this.checkMainSettings(userInput);
         Assert.assertThat(
-                userInput.getUserAttributes().get(0).getKey(),
-                CoreMatchers.is("user_name")
-        );
-        Assert.assertThat(
-                userInput.getUserAttributes().get(0).getValue(),
+                userInput.getUserAttributes().get("user_name"),
                 CoreMatchers.is("Almas")
         );
     }

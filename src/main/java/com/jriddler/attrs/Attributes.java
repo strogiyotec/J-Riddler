@@ -1,7 +1,6 @@
 package com.jriddler.attrs;
 
 
-import com.jriddler.cli.UserAttribute;
 import lombok.SneakyThrows;
 import lombok.experimental.Delegate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,10 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * List of table attributes.
@@ -40,7 +36,7 @@ public final class Attributes implements List<AttributeDefinition> {
         this.attributes = Attributes.fetchAttributesFromDb(
                 tableName,
                 jdbcTemplate,
-                Collections.emptyList()
+                Collections.emptyMap()
         );
     }
 
@@ -48,16 +44,16 @@ public final class Attributes implements List<AttributeDefinition> {
     /**
      * Ctor.
      *
-     * @param tableName    Table with attributes
-     * @param jdbcTemplate JdbcTemplate to send sql query
-     * @param userAttributes User defined attribute values
+     * @param tableName      Table with attributes
+     * @param jdbcTemplate   JdbcTemplate to send sql query
+     * @param userAttributes User defined attributes
      */
     @SneakyThrows(SQLException.class)
     @SuppressWarnings("LineLength")
     public Attributes(
             final String tableName,
             final JdbcTemplate jdbcTemplate,
-            final List<UserAttribute> userAttributes
+            final Map<String, String> userAttributes
     ) {
         this.attributes = Attributes.fetchAttributesFromDb(
                 tableName,
@@ -71,7 +67,7 @@ public final class Attributes implements List<AttributeDefinition> {
      *
      * @param tableName    Table name
      * @param jdbcTemplate JdbcTemplate for sql
-     * @param attributes User defined attribute values
+     * @param attributes   User defined attributes
      * @return List of attributes
      * @throws SQLException if failed
      */
@@ -79,7 +75,7 @@ public final class Attributes implements List<AttributeDefinition> {
     private static List<AttributeDefinition> fetchAttributesFromDb(
             final String tableName,
             final JdbcTemplate jdbcTemplate,
-            final List<UserAttribute> attributes
+            final Map<String, String> attributes
     ) throws SQLException {
         final List<AttributeDefinition> attrs = new ArrayList<>(16);
         try (final Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()) {

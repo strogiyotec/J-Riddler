@@ -1,10 +1,11 @@
 package com.jriddler.cli;
 
+import com.beust.jcommander.DynamicParameter;
 import com.beust.jcommander.Parameter;
 import lombok.Getter;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Db settings from cli.
@@ -13,15 +14,16 @@ import java.util.List;
 public final class UserInput {
 
     /**
-     * List of table attrs.
+     * User specified parameters.
+     * Key - Param name
+     * Value -Param value as string
      */
     @SuppressWarnings("LineLength")
-    @Parameter(
-            names = "-attrs",
-            description = "Dynamic attributes to use during insert instead of random data",
-            listConverter = UserAttrConverter.class
+    @DynamicParameter(
+            names = "-UA",
+            description = "Dynamic attributes to use during insert instead of random data"
     )
-    private List<UserAttribute> userAttributes = Collections.emptyList();
+    private Map<String, String> userAttributes = new HashMap<>();
 
     /**
      * Default db port.
