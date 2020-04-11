@@ -36,7 +36,7 @@ mvn checkstyle:check test
 1. Build project `mvn clean package`
 2. Run jar file with params `java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test`
 
-# Example output 
+Example output:
 
 ```
 INFO: New row for table [test] was created Params
@@ -50,3 +50,13 @@ Attribute: sum Value 0
 Attribute: age2 Value 0
 
 ```
+If you want to specify custom value for attribute then use -UA(user attribute) attribute
+
+Example:
+`
+java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test -DAemail=test@gmail.com
+`
+
+in this case **J-Riddler** will use **test@gmail.com** as a value for **email** and random values for other attributes
+
+
