@@ -2,8 +2,8 @@ package com.jriddler.attrs;
 
 import lombok.SneakyThrows;
 import lombok.experimental.Delegate;
-import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -24,32 +24,33 @@ public final class PrimaryKeys implements List<String> {
 
     /**
      * Ctor.
-     * @param tableName Table name
-     * @param jdbcTemplate Jdbc template
+     *
+     * @param tableName  Table name
+     * @param dataSource DataSource
      */
     @SneakyThrows(SQLException.class)
     public PrimaryKeys(
             final String tableName,
-            final JdbcTemplate jdbcTemplate
+            final DataSource dataSource
     ) {
-        this.primaryKeys = PrimaryKeys.primaryKeys(tableName, jdbcTemplate);
+        this.primaryKeys = PrimaryKeys.primaryKeys(tableName, dataSource);
     }
 
     /**
      * Get primary keys.
      *
-     * @param tableName    Table name
-     * @param jdbcTemplate Jdbc template
+     * @param tableName  Table name
+     * @param dataSource DataSource
      * @return Primary keys
      * @throws SQLException if failed
      */
     @SuppressWarnings("LineLength")
     private static List<String> primaryKeys(
             final String tableName,
-            final JdbcTemplate jdbcTemplate
+            final DataSource dataSource
     ) throws SQLException {
         final List<String> keys = new ArrayList<>(16);
-        try (final Connection connection = jdbcTemplate.getDataSource().getConnection()) {
+        try (final Connection connection = dataSource.getConnection()) {
             try (final ResultSet rs = PrimaryKeys.primaryKeysMeta(connection, tableName)) {
                 while (rs.next()) {
                     keys.add(

@@ -6,10 +6,11 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -26,7 +27,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
     /**
      * Sql operation to test.
      */
-    private SqlOperation<KeyHolder> sqlOperation;
+    private SqlOperation<List<Map<String, Object>>> sqlOperation;
 
     /**
      * Init.
@@ -52,10 +53,10 @@ public final class SqlInsertTestCase extends TestDbInstance {
                 ),
                 new PrimaryKeys(
                         "users",
-                        this.jdbcTemplate
+                        TestDbInstance.datasource
                 ),
                 "users",
-                this.jdbcTemplate
+                this.query
         );
     }
 
@@ -66,15 +67,14 @@ public final class SqlInsertTestCase extends TestDbInstance {
     @SuppressWarnings("LineLength")
     public void testSqlInsert() {
         Assert.assertThat(
-                this.sqlOperation.perform().getKey(),
+                this.sqlOperation.perform().get(0).get("id"),
                 CoreMatchers.is(this.user.getId())
         );
         final User dbUser = Objects.requireNonNull(
-                this.jdbcTemplate.queryForObject(
-                        "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1",
-                        new User.UserMapper(),
-                        this.user.getId()
-                )
+                this.query.select(
+                        "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1"
+                ).params(this.user.getId())
+                .singleResult(new User.UserMapper())
         );
         Assert.assertThat(
                 dbUser.getAge(),

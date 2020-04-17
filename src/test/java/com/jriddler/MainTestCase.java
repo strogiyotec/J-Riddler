@@ -1,9 +1,11 @@
 package com.jriddler;
 
+import org.codejargon.fluentjdbc.api.mapper.Mappers;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +18,12 @@ public final class MainTestCase extends TestDbInstance {
 
     /**
      * Test that new row is created.
+     *
+     * @throws SQLException If failed
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testMain() {
+    public void testMain() throws SQLException {
         Main.main(
                 new String[]{
                         "-table", "users",
@@ -31,17 +35,19 @@ public final class MainTestCase extends TestDbInstance {
                 }
         );
         Assert.assertThat(
-                this.jdbcTemplate.queryForList("SELECT * FROM users;").size(),
+                this.query.select("SELECT * FROM users;").listResult(Mappers.map()).size(),
                 CoreMatchers.is(1)
         );
     }
 
     /**
      * Test that new row is created.
+     *
+     * @throws SQLException If failed
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testMainWithUserDefinedAttrs() {
+    public void testMainWithUserDefinedAttrs() throws SQLException {
         Main.main(
                 new String[]{
                         "-table", "users",
@@ -53,7 +59,7 @@ public final class MainTestCase extends TestDbInstance {
                         "-UAname=Almas",
                 }
         );
-        final List<Map<String, Object>> users = this.jdbcTemplate.queryForList("SELECT * FROM users where name='Almas';");
+        final List<Map<String, Object>> users = this.query.select("SELECT * FROM users where name='Almas';").listResult(Mappers.map());
         Assert.assertFalse(users.isEmpty());
         Assert.assertThat(
                 users.get(0).get("name").toString(),

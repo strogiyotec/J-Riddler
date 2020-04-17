@@ -1,12 +1,13 @@
 package com.jriddler;
 
+import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
+import org.codejargon.fluentjdbc.api.query.Query;
 import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.postgresql.ds.PGSimpleDataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
@@ -43,13 +44,14 @@ public abstract class TestDbInstance {
     /**
      * Data source.
      */
-    private static DataSource datasource;
+    @SuppressWarnings("VisibilityModifier")
+    protected static DataSource datasource;
 
     /**
-     * Jdbc template.
+     * Query.
      */
     @SuppressWarnings("VisibilityModifier")
-    protected JdbcTemplate jdbcTemplate;
+    protected Query query;
 
     /**
      * Init.
@@ -71,8 +73,11 @@ public abstract class TestDbInstance {
      * Create jdbc template.
      */
     @Before
-    public final void initJdbc() {
-        this.jdbcTemplate = new JdbcTemplate(datasource);
+    public final void initQuery() {
+        this.query = new FluentJdbcBuilder()
+                .connectionProvider(datasource)
+                .build()
+                .query();
     }
 
     /**
@@ -80,7 +85,7 @@ public abstract class TestDbInstance {
      */
     @After
     public final void destroy() {
-        this.jdbcTemplate.update("DELETE FROM users");
+        this.query.update("DELETE FROM users").run();
     }
 
 

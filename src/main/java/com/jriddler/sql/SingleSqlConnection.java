@@ -30,8 +30,7 @@ public final class SingleSqlConnection implements Connection {
     /**
      * Commit and close origin.
      *
-     * @throws SQLException          If failed
-     * @throws IllegalStateException If already closed
+     * @throws SQLException If failed
      */
     public void destroyConnection() throws SQLException {
         if (this.origin.isClosed()) {

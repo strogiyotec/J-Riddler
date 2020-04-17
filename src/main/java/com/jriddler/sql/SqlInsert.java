@@ -6,11 +6,11 @@ import com.jriddler.attrs.Attributes;
 import com.jriddler.attrs.PrimaryKeys;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
+import org.codejargon.fluentjdbc.api.mapper.Mappers;
+import org.codejargon.fluentjdbc.api.query.Query;
 
-import java.sql.PreparedStatement;
+import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Log
-public final class SqlInsert implements SqlOperation<KeyHolder> {
+@SuppressWarnings("LineLength")
+public final class SqlInsert implements SqlOperation<List<Map<String, Object>>> {
 
     /**
      * List of table attributes.
@@ -40,22 +41,22 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
     private final String tableName;
 
     /**
-     * Jdbc jdbcTemplate.
+     * Jdbc query.
      */
-    private final JdbcTemplate jdbcTemplate;
+    private final Query query;
 
     /**
      * Ctor.
      *
-     * @param jdbcTemplate Jdbc template
-     * @param tableName    Table name
+     * @param dataSource DataSource
+     * @param tableName  Table name
      */
     public SqlInsert(
-            final JdbcTemplate jdbcTemplate,
+            final DataSource dataSource,
             final String tableName
     ) {
         this(
-                jdbcTemplate,
+                dataSource,
                 tableName,
                 Collections.emptyMap()
         );
@@ -64,25 +65,29 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
     /**
      * Ctor.
      *
-     * @param jdbcTemplate   Jdbc template
+     * @param dataSource     DataSource
      * @param tableName      Table name
      * @param userAttributes User defined attr values
      */
     public SqlInsert(
-            final JdbcTemplate jdbcTemplate,
+            final DataSource dataSource,
             final String tableName,
             final Map<String, String> userAttributes
     ) {
         this.tableAttrs = new Attributes(
                 tableName,
-                jdbcTemplate,
+                dataSource,
                 userAttributes
         );
         this.pkNames = new PrimaryKeys(
                 tableName,
-                jdbcTemplate
+                dataSource
         );
-        this.jdbcTemplate = jdbcTemplate;
+        this.query =
+                new FluentJdbcBuilder()
+                        .connectionProvider(dataSource)
+                        .build()
+                        .query();
         this.tableName = tableName;
     }
 
@@ -93,24 +98,14 @@ public final class SqlInsert implements SqlOperation<KeyHolder> {
      */
     @Override
     @SuppressWarnings("LineLength")
-    public KeyHolder perform() {
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-        this.jdbcTemplate.update(
-                connection -> {
-                    final PreparedStatement statement = connection.prepareStatement(
-                            this.query(),
-                            //in order to return generated values for primary keys
-                            this.pkNames.toArray(new String[0])
-                    );
-                    for (int i = 0; i < this.tableAttrs.size(); i++) {
-                        //because PreparedStatement expects index starting from 1
-                        statement.setObject(i + 1, this.tableAttrs.get(i).value());
-                    }
-                    return statement;
-                }, keyHolder
-        );
+    public List<Map<String, Object>> perform() {
+        final List<Map<String, Object>> generatedKeys = this.query.update(this.query())
+                .params(
+                        this.tableAttrs.stream().map(AttributeDefinition::value).collect(Collectors.toList())
+                )
+                .runFetchGenKeys(Mappers.map(), this.pkNames.toArray(new String[0])).generatedKeys();
         this.logNewRow();
-        return keyHolder;
+        return generatedKeys;
     }
 
     /**

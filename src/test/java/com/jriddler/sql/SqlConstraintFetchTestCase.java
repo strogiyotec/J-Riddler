@@ -28,7 +28,7 @@ public final class SqlConstraintFetchTestCase extends TestDbInstance {
     public void init() {
         this.sqlConstraint = new SqlConstraintFetch(
                 "users",
-                this.jdbcTemplate
+                this.query
         );
     }
 

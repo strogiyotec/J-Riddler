@@ -1,11 +1,14 @@
 package com.jriddler.sql;
 
+import lombok.extern.java.Log;
+
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +16,13 @@ import java.util.logging.Logger;
  * This connection will be committed and closed when destroy
  * method is called
  */
+@Log
 public final class SingleConnectionDataSource implements DataSource {
+
+    /**
+     * Lock monitor.
+     */
+    private final Object monitor = new Object();
 
     /**
      * Single sql connection.
@@ -105,7 +114,7 @@ public final class SingleConnectionDataSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        synchronized (this) {
+        synchronized (this.monitor) {
             this.createConnection();
         }
         return this.connection;
@@ -116,13 +125,22 @@ public final class SingleConnectionDataSource implements DataSource {
      * Ignore username and pass
      * because these properties are already injected
      *
-     * @param username Username to ignore
-     * @param password Password to ignore
+     * @param connectionUserName Username to ignore
+     * @param connectionPassword Password to ignore
      * @return Connection
-     * @throws SQLException if failed
+     * @throws SQLException If failed
      */
     @Override
-    public Connection getConnection(final String username, final String password) throws SQLException {
+    public Connection getConnection(
+            final String connectionUserName,
+            final String connectionPassword
+    ) throws SQLException {
+        if (!this.username.equals(connectionUserName)) {
+            throw new IllegalArgumentException("New value for username");
+        }
+        if (!this.password.equals(connectionPassword)) {
+            throw new IllegalArgumentException("New value for password");
+        }
         return this.getConnection();
     }
 
@@ -133,34 +151,46 @@ public final class SingleConnectionDataSource implements DataSource {
 
     @Override
     public boolean isWrapperFor(final Class<?> iface) throws SQLException {
-        throw new UnsupportedOperationException("isWrapperFor() is not supported");
+        throw new UnsupportedOperationException(
+                "isWrapperFor() is not supported"
+        );
     }
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {
-        throw new UnsupportedOperationException("getLogWrite() is not supported");
+        throw new UnsupportedOperationException(
+                "getLogWrite() is not supported"
+        );
     }
 
     @Override
     public void setLogWriter(final PrintWriter out) throws SQLException {
 
-        throw new UnsupportedOperationException("setLogWriter() is not supported");
+        throw new UnsupportedOperationException(
+                "setLogWriter() is not supported"
+        );
     }
 
     @Override
     public void setLoginTimeout(final int seconds) throws SQLException {
 
-        throw new UnsupportedOperationException("setLoginTimeout() is not supported");
+        throw new UnsupportedOperationException(
+                "setLoginTimeout() is not supported"
+        );
     }
 
     @Override
     public int getLoginTimeout() throws SQLException {
-        throw new UnsupportedOperationException("getLoginTimeout() is not supported");
+        throw new UnsupportedOperationException(
+                "getLoginTimeout() is not supported"
+        );
     }
 
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        throw new UnsupportedOperationException("getParentLogger() is not supported");
+        throw new UnsupportedOperationException(
+                "getParentLogger() is not supported"
+        );
     }
 
     /**
@@ -169,29 +199,38 @@ public final class SingleConnectionDataSource implements DataSource {
      * @throws SQLException if failed
      */
     public void destroy() throws SQLException {
-        this.connection.destroyConnection();
+        synchronized (this.monitor) {
+            if (this.connection != null) {
+                this.connection.destroyConnection();
+                log.log(Level.INFO, "Connection was closed");
+            } else {
+                log.log(Level.INFO, "Connection desn't exist, can't be closed");
+            }
+        }
     }
 
     /**
      * Create connection if doesn't exist.
      *
-     * @throws SQLException          if failed
-     * @throws IllegalStateException if connection is closed
+     * @throws SQLException if failed
      */
     private void createConnection() throws SQLException {
         if (this.connection == null) {
-            final Connection connection = DriverManager.getConnection(
+            final Connection origin = DriverManager.getConnection(
                     this.url,
                     this.username,
                     this.password
             );
-            connection.setAutoCommit(this.autoCommit);
+            origin.setAutoCommit(this.autoCommit);
             this.connection = new SingleSqlConnection(
-                    connection
+                    origin
             );
         } else if (this.connection.isClosed()) {
-            throw new IllegalStateException("Single connection is already closed");
+            throw new IllegalStateException(
+                    "Single connection is already closed"
+            );
         }
     }
 }
+
 

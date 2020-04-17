@@ -23,7 +23,7 @@ public final class AttributesTestCase extends TestDbInstance {
         final List<AttributeDefinition> attributes =
                 new Attributes(
                         "users",
-                        this.jdbcTemplate
+                        TestDbInstance.datasource
                 );
         Assert.assertThat(
                 attributes.get(0).name(),
@@ -61,7 +61,7 @@ public final class AttributesTestCase extends TestDbInstance {
         final List<AttributeDefinition> attributes =
                 new Attributes(
                         "managers",
-                        this.jdbcTemplate
+                        TestDbInstance.datasource
                 );
         Assert.assertThat(
                 attributes.size(),

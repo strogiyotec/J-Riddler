@@ -3,7 +3,7 @@ package com.jriddler.sql;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.jdbc.core.RowMapper;
+import org.codejargon.fluentjdbc.api.query.Mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,13 +52,10 @@ final class User {
     /**
      * Row Mapper for {@link User}.
      */
-    public static class UserMapper implements RowMapper<User> {
+    public static class UserMapper implements Mapper<User> {
 
         @Override
-        public User mapRow(
-                final ResultSet resultSet,
-                final int rowNum
-        ) throws SQLException {
+        public User map(final ResultSet resultSet) throws SQLException {
             return new User(
                     resultSet.getString("name"),
                     resultSet.getString("surname"),
@@ -73,6 +70,5 @@ final class User {
                     resultSet.getBoolean("active")
             );
         }
-
     }
 }

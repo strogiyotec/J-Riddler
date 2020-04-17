@@ -3,7 +3,8 @@ package com.jriddler.sql;
 import com.jriddler.contraint.Constraint;
 import com.jriddler.contraint.PgConstraint;
 import lombok.AllArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.codejargon.fluentjdbc.api.mapper.Mappers;
+import org.codejargon.fluentjdbc.api.query.Query;
 
 import java.util.List;
 import java.util.Map;
@@ -22,9 +23,9 @@ public final class SqlConstraintFetch implements SqlOperation<Map<String, List<C
     private final String tableName;
 
     /**
-     * Jdbc template.
+     * Query.
      */
-    private final JdbcTemplate jdbcTemplate;
+    private final Query query;
 
     /**
      * Retrieves all constraints as Map.
@@ -35,7 +36,7 @@ public final class SqlConstraintFetch implements SqlOperation<Map<String, List<C
      */
     @Override
     public Map<String, List<Constraint>> perform() {
-        final List<Map<String, Object>> constraints = this.jdbcTemplate.queryForList(this.query());
+        final List<Map<String, Object>> constraints = this.query.select(this.query()).listResult(Mappers.map());
         return constraints
                 .stream()
                 .collect(
