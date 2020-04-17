@@ -1,6 +1,6 @@
 package com.jriddler.attrs;
 
-import com.github.javafaker.Faker;
+import com.mifmif.common.regex.Generex;
 
 /**
  * Varchar attr.
@@ -36,19 +36,20 @@ public final class VarCharAttr implements AttributeDefinition {
         } else {
             this.length = length;
         }
-        this.value = new Faker().regexify(
+        this.value = new Generex(
                 String.format(
                         "[a-z1-9]{%d}",
                         this.length
                 )
-        );
+        ).random();
     }
 
     /**
      * Ctor.
-     * @param name Attr name
+     *
+     * @param name   Attr name
      * @param length Attr length
-     * @param value Attr value
+     * @param value  Attr value
      */
     @SuppressWarnings("LineLength")
     public VarCharAttr(
