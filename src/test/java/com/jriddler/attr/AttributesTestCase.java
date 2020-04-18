@@ -19,7 +19,7 @@ public final class AttributesTestCase extends TestDbInstance {
      * Test that actual table attrs were fetched.
      */
     @Test
-    public void testAttributes() {
+    public void testAttributeNames() {
         final List<AttributeDefinition> attributes =
                 new Attributes(
                         "users",

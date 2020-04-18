@@ -11,22 +11,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Test {@link SqlConstraintFetch}.
+ * Test {@link SqlConstraintsFetch}.
  */
 @SuppressWarnings("MagicNumber")
-public final class SqlConstraintFetchTestCase extends TestDbInstance {
+public final class SqlConstraintsFetchTestCase extends TestDbInstance {
 
     /**
      * Sql constraint to test.
      */
-    private SqlConstraintFetch sqlConstraint;
+    private SqlConstraintsFetch sqlConstraint;
 
     /**
      * Init.
      */
     @Before
     public void init() {
-        this.sqlConstraint = new SqlConstraintFetch(
+        this.sqlConstraint = new SqlConstraintsFetch(
                 "users",
                 this.query
         );

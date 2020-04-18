@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @SuppressWarnings("LineLength")
-public final class SqlConstraintFetch implements SqlOperation<Map<String, List<Constraint>>> {
+public final class SqlConstraintsFetch implements SqlOperation<Map<String, List<Constraint>>> {
 
     /**
      * Table name.

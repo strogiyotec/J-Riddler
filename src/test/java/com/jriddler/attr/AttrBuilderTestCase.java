@@ -98,7 +98,7 @@ public final class AttrBuilderTestCase {
     }
 
     /**
-     * Test that will fail cause given type id is not supported.
+     * Test that will fail cause  type with given id is not supported.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testUnSupportedType() {

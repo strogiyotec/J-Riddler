@@ -59,8 +59,11 @@ public final class MainTestCase extends TestDbInstance {
                         "-UAname=Almas",
                 }
         );
-        final List<Map<String, Object>> users = this.query.select("SELECT * FROM users where name='Almas';").listResult(Mappers.map());
-        Assert.assertFalse(users.isEmpty());
+        final List<Map<String, Object>> users =
+                this.query
+                        .select("SELECT * FROM users where name='Almas';")
+                        .listResult(Mappers.map());
+        // name is equals to name from user attrs
         Assert.assertThat(
                 users.get(0).get("name").toString(),
                 CoreMatchers.is("Almas")
