@@ -91,7 +91,7 @@ public final class SqlInsert implements SqlOperation<List<Map<String, Object>>> 
     }
 
     /**
-     * ctor.
+     * Ctor.
      * use predefined values for row attrs
      *
      * @param dataSource     DataSource

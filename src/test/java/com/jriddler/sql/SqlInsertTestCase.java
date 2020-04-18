@@ -27,7 +27,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
     /**
      * Sql operation to test.
      */
-    private SqlOperation<List<Map<String, Object>>> sqlOperation;
+    private SqlOperation<List<Map<String, Object>>> insert;
 
     /**
      * Init.
@@ -42,7 +42,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
                 10,
                 true
         );
-        this.sqlOperation = new SqlInsert(
+        this.insert = new SqlInsert(
                 Arrays.asList(
                         new IntAttr("age", this.user.getAge()),
                         new VarCharAttr("name", 6, this.user.getName()),
@@ -61,15 +61,24 @@ public final class SqlInsertTestCase extends TestDbInstance {
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testSqlInsert() {
+    public void testNewRowHasSpecifiedParams() {
+        // check that inserted user id is
+        // the same as was specified in attrs list
         Assert.assertThat(
-                this.sqlOperation.perform().get(0).get("id"),
+                this.insert.perform().get(0).get("id"),
                 CoreMatchers.is(this.user.getId())
         );
+        // check that new row has the same attrs
+        // as specified in list of attrs
         final User dbUser = Objects.requireNonNull(
                 this.query.select(
-                        "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1"
-                ).params(this.user.getId())
+                        String.join(
+                                " ",
+                                "SELECT age,name,surname,active,birthday,id ",
+                                "FROM users WHERE id = ? LIMIT 1;"
+                        )
+                )
+                        .params(this.user.getId())
                         .singleResult(new User.UserMapper())
         );
         Assert.assertThat(
