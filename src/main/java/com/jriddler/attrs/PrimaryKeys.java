@@ -17,7 +17,7 @@ import java.util.List;
 public final class PrimaryKeys implements List<String> {
 
     /**
-     * List of primary key column names.
+     * List of primary key columns names.
      */
     @Delegate
     private final List<String> primaryKeys;

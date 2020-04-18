@@ -47,6 +47,7 @@ public final class SqlInsert implements SqlOperation<List<Map<String, Object>>> 
 
     /**
      * Ctor.
+     * Creates random attributes for new row
      *
      * @param dataSource DataSource
      * @param tableName  Table name
@@ -64,6 +65,34 @@ public final class SqlInsert implements SqlOperation<List<Map<String, Object>>> 
 
     /**
      * Ctor.
+     * Create primary keys from table name
+     *
+     * @param tableAttrs Table attrs
+     * @param tableName  Table name
+     * @param dataSource Datasource
+     */
+    public SqlInsert(
+            final List<AttributeDefinition> tableAttrs,
+            final String tableName,
+            final DataSource dataSource
+    ) {
+        this(
+                tableAttrs,
+                new PrimaryKeys(
+                        tableName,
+                        dataSource
+                ),
+                tableName,
+                new FluentJdbcBuilder()
+                        .connectionProvider(dataSource)
+                        .build()
+                        .query()
+        );
+    }
+
+    /**
+     * ctor.
+     * use predefined values for row attrs
      *
      * @param dataSource     DataSource
      * @param tableName      Table name

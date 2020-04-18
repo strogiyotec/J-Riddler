@@ -51,12 +51,8 @@ public final class SqlInsertTestCase extends TestDbInstance {
                         new TimeStampAttr("birthday", this.user.getBirthday()),
                         new BigIntAttr("id", this.user.getId())
                 ),
-                new PrimaryKeys(
-                        "users",
-                        TestDbInstance.datasource
-                ),
                 "users",
-                this.query
+                TestDbInstance.datasource
         );
     }
 
@@ -74,7 +70,7 @@ public final class SqlInsertTestCase extends TestDbInstance {
                 this.query.select(
                         "SELECT age,name,surname,active,birthday,id FROM users WHERE id = ? LIMIT 1"
                 ).params(this.user.getId())
-                .singleResult(new User.UserMapper())
+                        .singleResult(new User.UserMapper())
         );
         Assert.assertThat(
                 dbUser.getAge(),
