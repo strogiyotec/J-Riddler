@@ -2,26 +2,21 @@ package com.jriddler.attrs;
 
 
 import lombok.SneakyThrows;
-import lombok.experimental.Delegate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * List of table attributes.
  */
-public final class Attributes implements List<AttributeDefinition> {
+public final class Attributes implements Iterable<AttributeDefinition> {
 
     /**
      * Actual list of attributes.
      */
-    @Delegate
     private final List<AttributeDefinition> attributes;
 
     /**
@@ -113,5 +108,10 @@ public final class Attributes implements List<AttributeDefinition> {
                 tableName,
                 null
         );
+    }
+
+    @Override
+    public Iterator<AttributeDefinition> iterator() {
+        return this.attributes.iterator();
     }
 }

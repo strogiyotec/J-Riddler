@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public final class InsertQueryTestCase {
     @Test
     public void testBuild() {
         Assert.assertThat(
-                this.insertQuery.build(),
+                this.insertQuery.create(),
                 CoreMatchers.is(
                         String.join(
                                 "\n",

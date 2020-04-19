@@ -1,9 +1,9 @@
 package com.jriddler;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.attrs.ColumnName;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
  * Create insert query for attributes.
@@ -12,63 +12,38 @@ import java.util.List;
 public final class InsertQuery {
 
     /**
-     * List of attrs.
+     * List of column names.
      */
-    private final List<AttributeDefinition> attributes;
+    private final Iterable<? extends ColumnName> names;
 
     /**
      * Table name.
      */
     private final String tableName;
 
-    /**
-     * Build insert query.
-     *
-     * @return Insert query
-     */
-    public String build() {
-        final StringBuilder queryBuilder =
-                new StringBuilder(
-                        this.tableName.length() * this.attributes.size()
-                );
-        this.insertInto(queryBuilder);
-        this.values(queryBuilder);
-        return queryBuilder.toString();
-    }
 
     /**
-     * Create values part of insert query.
-     *
-     * @param queryBuilder QueryBuilder
+     * Create insert query.
      */
-    private void values(final StringBuilder queryBuilder) {
-        queryBuilder.append("VALUES \n(");
-        for (int i = 0; i < this.attributes.size(); i++) {
-            queryBuilder.append("?");
-            if (i != this.attributes.size() - 1) {
-                queryBuilder.append(",");
-            }
-        }
-        queryBuilder.append(")\n");
-    }
-
-    /**
-     * Create insert part of insert query.
-     *
-     * @param queryBuilder QueryBuilder
-     */
-    private void insertInto(final StringBuilder queryBuilder) {
-        queryBuilder
-                .append("INSERT INTO ")
+    public String create() {
+        final StringBuilder insert = new StringBuilder(16);
+        insert.append("INSERT INTO ")
                 .append(this.tableName)
                 .append("\n(");
-        for (int i = 0; i < this.attributes.size(); i++) {
-            final AttributeDefinition attribute = this.attributes.get(i);
-            queryBuilder.append(attribute.name());
-            if (i != this.attributes.size() - 1) {
-                queryBuilder.append(",");
+        final StringBuilder values = new StringBuilder(16);
+        values.append("VALUES \n(");
+        final Iterator<? extends ColumnName> iterator = this.names.iterator();
+        while (iterator.hasNext()) {
+            final ColumnName columnName = iterator.next();
+            insert.append(columnName.name());
+            values.append("?");
+            if (iterator.hasNext()) {
+                values.append(",");
+                insert.append(",");
             }
         }
-        queryBuilder.append(")\n");
+        values.append(")\n");
+        insert.append(")\n");
+        return insert.append(values).toString();
     }
 }

@@ -1,10 +1,12 @@
 package com.jriddler;
 
 import com.beust.jcommander.JCommander;
+import com.jriddler.attrs.Attributes;
+import com.jriddler.attrs.ColumnValue;
 import com.jriddler.cli.UserInput;
 import com.jriddler.sql.SingleConnectionDataSource;
-import com.jriddler.sql.SqlInsert;
 import lombok.extern.java.Log;
+import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -55,11 +57,24 @@ public final class Main {
             final UserInput userInput,
             final SingleConnectionDataSource dataSource
     ) {
-        new SqlInsert(
-                dataSource,
+        final Attributes attributes = new Attributes(
                 userInput.getTable(),
+                dataSource,
                 userInput.getUserAttributes()
-        ).perform();
+        );
+        final InsertQuery insertQuery = new InsertQuery(
+                attributes,
+                userInput.getTable()
+        );
+        new FluentJdbcBuilder().connectionProvider(dataSource)
+                .build()
+                .query()
+                .update(insertQuery.create())
+                .params(
+                        ColumnValue.values(
+                                attributes
+                        )
+                ).run();
     }
 
     /**
