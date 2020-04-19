@@ -3,6 +3,7 @@ package com.jriddler.attrs;
 /**
  * Definition of column in db.
  */
+@SuppressWarnings("InterfaceIsType")
 public interface AttributeDefinition extends ColumnName, ColumnValue {
 
     /**

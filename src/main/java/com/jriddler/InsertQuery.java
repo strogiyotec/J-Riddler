@@ -24,6 +24,8 @@ public final class InsertQuery {
 
     /**
      * Create insert query.
+     *
+     * @return Insert query
      */
     public String create() {
         final StringBuilder insert = new StringBuilder(16);
