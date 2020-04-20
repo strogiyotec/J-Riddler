@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.jriddler.attrs.Attributes;
 import com.jriddler.attrs.ColumnValue;
 import com.jriddler.cli.UserInput;
+import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
 import lombok.extern.java.Log;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
@@ -62,18 +63,19 @@ public final class Main {
                 dataSource,
                 userInput.getUserAttributes()
         );
-        final InsertQuery insertQuery = new InsertQuery(
-                attributes,
-                userInput.getTable()
-        );
-        new FluentJdbcBuilder().connectionProvider(dataSource)
+        new FluentJdbcBuilder()
+                .afterQueryListener(new LoggableInsertQuery(attributes))
+                .connectionProvider(dataSource)
                 .build()
                 .query()
-                .update(insertQuery.create())
+                .update(
+                        new InsertQuery(
+                                attributes,
+                                userInput.getTable()
+                        ).create()
+                )
                 .params(
-                        ColumnValue.values(
-                                attributes
-                        )
+                        ColumnValue.values(attributes)
                 ).run();
     }
 

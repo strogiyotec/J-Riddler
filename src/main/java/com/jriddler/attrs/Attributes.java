@@ -60,6 +60,11 @@ public final class Attributes implements Iterable<AttributeDefinition> {
         );
     }
 
+    @Override
+    public Iterator<AttributeDefinition> iterator() {
+        return this.attributes.iterator();
+    }
+
     /**
      * Collect all table attributes into single list.
      *
@@ -108,10 +113,5 @@ public final class Attributes implements Iterable<AttributeDefinition> {
                 tableName,
                 null
         );
-    }
-
-    @Override
-    public Iterator<AttributeDefinition> iterator() {
-        return this.attributes.iterator();
     }
 }

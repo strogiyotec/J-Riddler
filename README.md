@@ -39,16 +39,18 @@ mvn checkstyle:check test
 Example output:
 
 ```
-INFO: New row for table [test] was created Params
-Attribute: id Value 9
-Attribute: active Value true
-Attribute: long_id Value 9
-Attribute: created Value 2020-03-10T15:27:53.348963-07:00
-Attribute: surname Value k7mir7lo97
-Attribute: age Value 9
-Attribute: sum Value 0
-Attribute: age2 Value 0
-
+Apr 20, 2020 3:19:37 PM com.jriddler.sql.LoggableInsertQuery listen
+INFO: 
+Execution time 7ms
+Insert query:
+INSERT INTO test
+(id,name,active)
+VALUES 
+(?,?,?)
+Attributes:
+Name=id, Value=351544063
+Name=name, Value=b449bp9547
+Name=active, Value=true
 ```
 If you want to specify custom value for attribute then use -UA(user attribute) attribute
 
