@@ -1,14 +1,15 @@
-package com.jriddler.attrs;
+package com.jriddler.attrs.jdbc;
 
+import com.jriddler.attrs.AttributeDefinition;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Int attr.
+ * Big integer attr.
  */
 @AllArgsConstructor
-public final class IntAttr implements AttributeDefinition {
+public final class BigIntAttr implements AttributeDefinition {
 
     /**
      * Name.
@@ -18,32 +19,29 @@ public final class IntAttr implements AttributeDefinition {
     /**
      * Value.
      */
-    private final int value;
+    private final long value;
 
     /**
-     * Ctor that creates random val.
+     * Ctor that create random value.
      *
      * @param name Column name
      */
     @SuppressWarnings("MagicNumber")
-    public IntAttr(final String name) {
+    public BigIntAttr(final String name) {
         this(
                 name,
-                ThreadLocalRandom.current().nextInt(
-                        0,
-                        Integer.MAX_VALUE / 2
-                )
+                ThreadLocalRandom.current().nextLong(0, 10)
         );
     }
 
     @Override
-    public Integer value() {
+    public Long value() {
         return this.value;
     }
 
     @Override
     public int size() {
-        return Integer.BYTES;
+        return Long.BYTES;
     }
 
     @Override

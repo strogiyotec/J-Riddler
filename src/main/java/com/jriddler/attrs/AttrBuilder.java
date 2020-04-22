@@ -1,5 +1,6 @@
 package com.jriddler.attrs;
 
+import com.jriddler.attrs.jdbc.*;
 import lombok.experimental.Delegate;
 
 import java.sql.ResultSet;

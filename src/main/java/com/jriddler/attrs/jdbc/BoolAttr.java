@@ -1,5 +1,6 @@
-package com.jriddler.attrs;
+package com.jriddler.attrs.jdbc;
 
+import com.jriddler.attrs.AttributeDefinition;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
