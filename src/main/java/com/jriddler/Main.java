@@ -34,18 +34,28 @@ public final class Main {
     @SuppressWarnings("LineLength")
     public static void main(final String[] args) throws SQLException {
         Main.setUpLogs();
-        final UserInput userInput = new UserInput();
-        JCommander.newBuilder()
-                .addObject(userInput)
-                .build()
-                .parse(args);
-
+        final UserInput userInput = Main.parsedInput(args);
         final SingleConnectionDataSource dataSource = Main.dataSource(userInput);
         try {
             Main.insertRandomRow(userInput, dataSource);
         } finally {
             dataSource.destroy();
         }
+    }
+
+    /**
+     * Convert args to UserInput instance.
+     *
+     * @param args List of cli args
+     * @return UserInput
+     */
+    private static UserInput parsedInput(final String[] args) {
+        final UserInput userInput = new UserInput();
+        JCommander.newBuilder()
+                .addObject(userInput)
+                .build()
+                .parse(args);
+        return userInput;
     }
 
     /**
