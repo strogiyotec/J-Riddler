@@ -3,7 +3,14 @@ J-Riddler is a random data generator for postgres
 
 ## Motivation
 
-Despite of database migration tools sometimes you need to have an actual data inside database tables
+A lot of developers use Database Migration Tools such as [Flyway](https://flywaydb.org/)
+
+**However** these tools allow you to have the same schema in production and local environments,**not data**.
+
+Let's say you want to test pagination , in order to do this you need 42 rows in table,
+you don't care about the quality of data , the only thing you care about is the existence of this data. 
+
+
 
 **J-Riddler** gives you a plain and simple CLI to fill these tables instead of writing huge **INSERT** queries by your own.
 The final jar size is 1MB(can be improved using [Graal native images](https://www.graalvm.org/))
@@ -36,6 +43,15 @@ mvn checkstyle:check test
 1. Build project `mvn clean package`
 2. Run jar file with params `java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test`
 
+The list of attributes:
+
+ * **table** - Table name
+ * **host** - Postgres host (localhost by default)
+ * **port** - Postgres port (5432 by default)
+ * **name** - Username
+ * **password** - Password
+ * **db** - Database name
+
 Example output:
 
 ```
@@ -52,6 +68,9 @@ Name=id, Value=351544063
 Name=name, Value=b449bp9547
 Name=active, Value=true
 ```
+
+## Custom values
+
 If you want to specify custom value for attribute then use -UA(user attribute) attribute
 
 Example:
