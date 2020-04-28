@@ -1,6 +1,6 @@
 package com.jriddler.sql;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.codejargon.fluentjdbc.api.query.listen.AfterQueryListener;
@@ -16,9 +16,9 @@ import java.util.logging.Level;
 public final class LoggableInsertQuery implements AfterQueryListener {
 
     /**
-     * List of inserted attributes.
+     * List of inserted columns.
      */
-    private final Iterable<AttributeDefinition> attributes;
+    private final Iterable<ColumnDefinition> columns;
 
     @Override
     public void listen(final ExecutionDetails executionDetails) {
@@ -29,31 +29,31 @@ public final class LoggableInsertQuery implements AfterQueryListener {
                             "\n",
                             "\nExecution time {0}ms",
                             "Insert query:",
-                            "{1}Attributes:",
+                            "{1}Columns:",
                             "{2}"
                     ),
                     new Object[]{
                             executionDetails.executionTimeMs(),
                             executionDetails.sql(),
-                            this.attrLog(),
+                            this.columnsAsString(),
                     }
             );
         }
     }
 
     /**
-     * String representation of all attributes.
+     * String representation of all columns.
      *
      * @return String representation
      */
-    private String attrLog() {
+    private String columnsAsString() {
         final StringBuilder builder = new StringBuilder();
-        this.attributes.forEach(attr ->
+        this.columns.forEach(column ->
                 builder
                         .append("Name=")
-                        .append(attr.name())
+                        .append(column.name())
                         .append(", Value=")
-                        .append(attr.value())
+                        .append(column.value())
                         .append("\n"));
         return builder.toString();
     }

@@ -1,12 +1,12 @@
 package com.jriddler;
 
-import com.jriddler.attrs.ColumnName;
+import com.jriddler.columns.ColumnName;
 import lombok.AllArgsConstructor;
 
 import java.util.Iterator;
 
 /**
- * Create insert query for attributes.
+ * Create insert query for table.
  */
 @AllArgsConstructor
 public final class InsertQuery {

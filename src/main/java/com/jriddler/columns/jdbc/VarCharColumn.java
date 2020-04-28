@@ -1,12 +1,12 @@
-package com.jriddler.attrs.jdbc;
+package com.jriddler.columns.jdbc;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import com.mifmif.common.regex.Generex;
 
 /**
- * Varchar attr.
+ * Varchar columns.
  */
-public final class VarCharAttr implements AttributeDefinition {
+public final class VarCharColumn implements ColumnDefinition {
 
     /**
      * Name.
@@ -30,7 +30,7 @@ public final class VarCharAttr implements AttributeDefinition {
      * @param length Varchar length
      */
     @SuppressWarnings("MagicNumber")
-    public VarCharAttr(final String name, final int length) {
+    public VarCharColumn(final String name, final int length) {
         this.name = name;
         if (length == Integer.MAX_VALUE) {
             this.length = 10;
@@ -48,12 +48,12 @@ public final class VarCharAttr implements AttributeDefinition {
     /**
      * Ctor.
      *
-     * @param name   Attr name
-     * @param length Attr length
-     * @param value  Attr value
+     * @param name   Column name
+     * @param length Column length
+     * @param value  Column value
      */
     @SuppressWarnings("LineLength")
-    public VarCharAttr(
+    public VarCharColumn(
             final String name,
             final int length,
             final String value
@@ -61,7 +61,7 @@ public final class VarCharAttr implements AttributeDefinition {
         if (value.length() > length) {
             throw new IllegalArgumentException(
                     String.format(
-                            "Value [%s] for attr [%s] exceeded max length limit [%d]",
+                            "Value [%s] for columns [%s] exceeded max length limit [%d]",
                             value,
                             name,
                             length

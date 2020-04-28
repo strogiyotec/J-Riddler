@@ -1,7 +1,7 @@
 package com.jriddler;
 
-import com.jriddler.attrs.*;
-import com.jriddler.attrs.jdbc.*;
+import com.jriddler.columns.*;
+import com.jriddler.columns.jdbc.*;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,13 +31,13 @@ public final class InsertQueryTestCase {
      */
     @Before
     public void init() {
-        final List<AttributeDefinition> definitions = Arrays.asList(
-                new IntAttr("age"),
-                new VarCharAttr("name", 10),
-                new VarCharAttr("surname", 10),
-                new BoolAttr("active"),
-                new TimeStampAttr("birthday"),
-                new BigIntAttr("id")
+        final List<ColumnDefinition> definitions = Arrays.asList(
+                new IntColumn("age"),
+                new VarCharColumn("name", 10),
+                new VarCharColumn("surname", 10),
+                new BoolColumn("active"),
+                new TimeStampColumn("birthday"),
+                new BigIntColumn("id")
         );
         this.insertQuery = new InsertQuery(definitions, TABLE_NAME);
     }

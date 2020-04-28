@@ -1,4 +1,4 @@
-package com.jriddler.attrs;
+package com.jriddler.columns;
 
 import lombok.SneakyThrows;
 

@@ -43,7 +43,7 @@ mvn checkstyle:check test
 1. Build project `mvn clean package`
 2. Run jar file with params `java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test`
 
-The list of attributes:
+The list of columns:
 
  * **table** - Table name
  * **host** - Postgres host (localhost by default)
@@ -63,7 +63,7 @@ INSERT INTO test
 (id,name,active)
 VALUES 
 (?,?,?)
-Attributes:
+Columns:
 Name=id, Value=351544063
 Name=name, Value=b449bp9547
 Name=active, Value=true
@@ -71,13 +71,13 @@ Name=active, Value=true
 
 ## Custom values
 
-If you want to specify custom value for attribute then use -UA(user attribute) attribute
+If you want to specify custom value for column then use -V(custom value) attribute
 
 Example:
 `
-java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test -DAemail=test@gmail.com
+java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postgres -password 123 -db test -Vemail=test@gmail.com
 `
 
-in this case **J-Riddler** will use **test@gmail.com** as a value for **email** and random values for other attributes
+in this case **J-Riddler** will use **test@gmail.com** as a value for **email** and random values for other columns
 
 

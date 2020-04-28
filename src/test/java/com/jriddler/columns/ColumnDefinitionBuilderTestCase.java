@@ -1,8 +1,6 @@
-package com.jriddler.attr;
+package com.jriddler.columns;
 
 
-import com.jriddler.attrs.AttributeDefinition;
-import com.jriddler.attrs.AttrBuilder;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,16 +12,16 @@ import java.time.OffsetDateTime;
  * Test Definition factory.
  */
 @SuppressWarnings("MagicNumber")
-public final class AttrBuilderTestCase {
+public final class ColumnDefinitionBuilderTestCase {
 
 
     /**
-     * Test create int attr.
+     * Test create int columns.
      */
     @Test
     public void testCreateInt() {
         Assert.assertThat(
-                new AttrBuilder(
+                new ColumnDefinitionBuilder(
                         Types.INTEGER,
                         4,
                         "age"
@@ -33,12 +31,12 @@ public final class AttrBuilderTestCase {
     }
 
     /**
-     * Test create long attr.
+     * Test create long columns.
      */
     @Test
     public void testCreateBigInt() {
         Assert.assertThat(
-                new AttrBuilder(
+                new ColumnDefinitionBuilder(
                         Types.BIGINT,
                         8,
                         "id"
@@ -48,12 +46,12 @@ public final class AttrBuilderTestCase {
     }
 
     /**
-     * Test create bool attr.
+     * Test create bool columns.
      */
     @Test
     public void testCreateBool() {
         Assert.assertThat(
-                new AttrBuilder(
+                new ColumnDefinitionBuilder(
                         Types.BIT,
                         1,
                         "active"
@@ -63,12 +61,12 @@ public final class AttrBuilderTestCase {
     }
 
     /**
-     * Test create timestamp attr.
+     * Test create timestamp columns.
      */
     @Test
     public void testCreateTimeStamp() {
         Assert.assertThat(
-                new AttrBuilder(
+                new ColumnDefinitionBuilder(
                         Types.TIMESTAMP,
                         35,
                         "birthday"
@@ -78,11 +76,11 @@ public final class AttrBuilderTestCase {
     }
 
     /**
-     * Test create string attr.
+     * Test create string columns.
      */
     @Test
     public void testCreateString() {
-        final AttributeDefinition definition = new AttrBuilder(
+        final ColumnDefinition definition = new ColumnDefinitionBuilder(
                 Types.VARCHAR,
                 10,
                 "name"
@@ -102,7 +100,7 @@ public final class AttrBuilderTestCase {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testUnSupportedType() {
-        new AttrBuilder(
+        new ColumnDefinitionBuilder(
                 Integer.MIN_VALUE,
                 100,
                 "test"

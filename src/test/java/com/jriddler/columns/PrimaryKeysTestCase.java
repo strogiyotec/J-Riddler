@@ -1,7 +1,6 @@
-package com.jriddler.attr;
+package com.jriddler.columns;
 
 import com.jriddler.TestDbInstance;
-import com.jriddler.attrs.PrimaryKeys;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Test {@link com.jriddler.attrs.PrimaryKeys}.
+ * Test {@link com.jriddler.columns.PrimaryKeys}.
  */
 public final class PrimaryKeysTestCase extends TestDbInstance {
 

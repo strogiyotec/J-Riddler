@@ -1,8 +1,8 @@
 package com.jriddler;
 
 import com.beust.jcommander.JCommander;
-import com.jriddler.attrs.Attributes;
-import com.jriddler.attrs.ColumnValue;
+import com.jriddler.columns.Columns;
+import com.jriddler.columns.ColumnValue;
 import com.jriddler.cli.UserInput;
 import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
@@ -68,24 +68,24 @@ public final class Main {
             final UserInput userInput,
             final SingleConnectionDataSource dataSource
     ) {
-        final Attributes attributes = new Attributes(
+        final Columns columns = new Columns(
                 userInput.getTable(),
                 dataSource,
-                userInput.getUserAttributes()
+                userInput.getUserValues()
         );
         new FluentJdbcBuilder()
-                .afterQueryListener(new LoggableInsertQuery(attributes))
+                .afterQueryListener(new LoggableInsertQuery(columns))
                 .connectionProvider(dataSource)
                 .build()
                 .query()
                 .update(
                         new InsertQuery(
-                                attributes,
+                                columns,
                                 userInput.getTable()
                         ).create()
                 )
                 .params(
-                        ColumnValue.values(attributes)
+                        ColumnValue.values(columns)
                 ).run();
     }
 

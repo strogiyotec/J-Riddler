@@ -1,39 +1,39 @@
-package com.jriddler.attrs;
+package com.jriddler.columns;
 
 /**
  * Definition of column in db.
  */
 @SuppressWarnings("InterfaceIsType")
-public interface AttributeDefinition extends ColumnName, ColumnValue {
+public interface ColumnDefinition extends ColumnName, ColumnValue {
 
     /**
-     * Auto incremented attr.
+     * Auto incremented columns.
      */
-    AttributeDefinition AUTO_INCR = new AutoIncremented();
+    ColumnDefinition AUTO_INCR = new AutoIncremented();
 
     /**
-     * Auto generated attr.
+     * Auto generated columns.
      */
-    final class AutoIncremented implements AttributeDefinition {
+    final class AutoIncremented implements ColumnDefinition {
 
         @Override
         public Object value() {
             throw new UnsupportedOperationException(
-                    "AutoIncremented attr doesn't have value"
+                    "AutoIncremented columns doesn't have value"
             );
         }
 
         @Override
         public int size() {
             throw new UnsupportedOperationException(
-                    "AutoIncremented attr doesn't have size"
+                    "AutoIncremented columns doesn't have size"
             );
         }
 
         @Override
         public String name() {
             throw new UnsupportedOperationException(
-                    "AutoIncremented attr doesn't have name"
+                    "AutoIncremented columns doesn't have name"
             );
         }
     }

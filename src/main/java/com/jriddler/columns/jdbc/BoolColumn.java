@@ -1,15 +1,15 @@
-package com.jriddler.attrs.jdbc;
+package com.jriddler.columns.jdbc;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Bool attr.
+ * Bool columns.
  */
 @AllArgsConstructor
-public final class BoolAttr implements AttributeDefinition {
+public final class BoolColumn implements ColumnDefinition {
 
     /**
      * Name.
@@ -25,7 +25,7 @@ public final class BoolAttr implements AttributeDefinition {
      * Ctor that creates random value.
      * @param name Column name
      */
-    public BoolAttr(final String name) {
+    public BoolColumn(final String name) {
         this(
                 name,
                 ThreadLocalRandom.current().nextBoolean()

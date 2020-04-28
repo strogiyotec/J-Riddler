@@ -1,15 +1,15 @@
-package com.jriddler.attrs.jdbc;
+package com.jriddler.columns.jdbc;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Int attr.
+ * Int columns.
  */
 @AllArgsConstructor
-public final class IntAttr implements AttributeDefinition {
+public final class IntColumn implements ColumnDefinition {
 
     /**
      * Name.
@@ -27,7 +27,7 @@ public final class IntAttr implements AttributeDefinition {
      * @param name Column name
      */
     @SuppressWarnings("MagicNumber")
-    public IntAttr(final String name) {
+    public IntColumn(final String name) {
         this(
                 name,
                 ThreadLocalRandom.current().nextInt(

@@ -1,16 +1,16 @@
-package com.jriddler.attrs.jdbc;
+package com.jriddler.columns.jdbc;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Timestamp with time zone attr.
+ * Timestamp with time zone columns.
  */
 @AllArgsConstructor
-public final class TimeStampAttr implements AttributeDefinition {
+public final class TimeStampColumn implements ColumnDefinition {
 
     /**
      * Default formatter for date from user CLI.
@@ -33,7 +33,7 @@ public final class TimeStampAttr implements AttributeDefinition {
      *
      * @param name Column name
      */
-    public TimeStampAttr(final String name) {
+    public TimeStampColumn(final String name) {
         this(
                 name,
                 OffsetDateTime.now()
@@ -46,7 +46,7 @@ public final class TimeStampAttr implements AttributeDefinition {
      * @param value Predefined value
      * @param name  Column name
      */
-    public TimeStampAttr(final String name, final String value) {
+    public TimeStampColumn(final String name, final String value) {
         this(
                 name,
                 OffsetDateTime.parse(value, FORMATTER)

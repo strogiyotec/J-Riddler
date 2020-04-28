@@ -1,15 +1,15 @@
-package com.jriddler.attrs.jdbc;
+package com.jriddler.columns.jdbc;
 
-import com.jriddler.attrs.AttributeDefinition;
+import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Big integer attr.
+ * Big integer columns.
  */
 @AllArgsConstructor
-public final class BigIntAttr implements AttributeDefinition {
+public final class BigIntColumn implements ColumnDefinition {
 
     /**
      * Name.
@@ -27,7 +27,7 @@ public final class BigIntAttr implements AttributeDefinition {
      * @param name Column name
      */
     @SuppressWarnings("MagicNumber")
-    public BigIntAttr(final String name) {
+    public BigIntColumn(final String name) {
         this(
                 name,
                 ThreadLocalRandom.current().nextLong(0, 10)

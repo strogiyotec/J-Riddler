@@ -20,10 +20,10 @@ public final class UserInput {
      */
     @SuppressWarnings("LineLength")
     @DynamicParameter(
-            names = "-UA",
-            description = "Dynamic attributes to use during insert instead of random data"
+            names = "-V",
+            description = "Predefined values to use during insert instead of random data"
     )
-    private Map<String, String> userAttributes = new HashMap<>();
+    private Map<String, String> userValues = new HashMap<>();
 
     /**
      * Default db port.

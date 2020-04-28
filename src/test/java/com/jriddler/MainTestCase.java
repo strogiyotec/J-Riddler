@@ -47,7 +47,7 @@ public final class MainTestCase extends TestDbInstance {
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testMainWithUserDefinedAttrs() throws SQLException {
+    public void testMainWithCustomValue() throws SQLException {
         Main.main(
                 new String[]{
                         "-table", "users",
@@ -56,7 +56,7 @@ public final class MainTestCase extends TestDbInstance {
                         "-name", CONTAINER.getUsername(),
                         "-password", CONTAINER.getPassword(),
                         "-db", CONTAINER.getDatabaseName(),
-                        "-UAname=Almas",
+                        "-Vname=Almas",
                 }
         );
         final List<Map<String, Object>> users =
@@ -64,7 +64,7 @@ public final class MainTestCase extends TestDbInstance {
                         .select("SELECT * FROM users where name='Almas';")
                         .listResult(Mappers.map());
 
-        // name is equals to name from user attrs
+        // name is equals to name from user columns
         Assert.assertThat(
                 users.get(0).get("name").toString(),
                 CoreMatchers.is("Almas")

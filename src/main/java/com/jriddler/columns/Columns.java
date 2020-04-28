@@ -1,4 +1,4 @@
-package com.jriddler.attrs;
+package com.jriddler.columns;
 
 
 import lombok.SneakyThrows;
@@ -10,28 +10,28 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * List of table attributes.
+ * List of table columns.
  */
-public final class Attributes implements Iterable<AttributeDefinition> {
+public final class Columns implements Iterable<ColumnDefinition> {
 
     /**
-     * Actual list of attributes.
+     * Actual list of columns.
      */
-    private final List<AttributeDefinition> attributes;
+    private final List<ColumnDefinition> columns;
 
     /**
      * Ctor.
      *
-     * @param tableName  Table with attributes
+     * @param tableName  Table with columns
      * @param dataSource DataSource
      */
     @SneakyThrows(SQLException.class)
     @SuppressWarnings("LineLength")
-    public Attributes(
+    public Columns(
             final String tableName,
             final DataSource dataSource
     ) {
-        this.attributes = Attributes.fetchAttributesFromDb(
+        this.columns = Columns.dbColumns(
                 tableName,
                 dataSource,
                 Collections.emptyMap()
@@ -42,57 +42,56 @@ public final class Attributes implements Iterable<AttributeDefinition> {
     /**
      * Ctor.
      *
-     * @param tableName      Table with attributes
+     * @param tableName      Table with columns
      * @param dataSource     Datasource
-     * @param userAttributes User defined attributes
+     * @param customValues Custom column values to use
      */
     @SneakyThrows(SQLException.class)
     @SuppressWarnings("LineLength")
-    public Attributes(
+    public Columns(
             final String tableName,
             final DataSource dataSource,
-            final Map<String, String> userAttributes
+            final Map<String, String> customValues
     ) {
-        this.attributes = Attributes.fetchAttributesFromDb(
+        this.columns = Columns.dbColumns(
                 tableName,
                 dataSource,
-                userAttributes
+                customValues
         );
     }
 
     @Override
-    public Iterator<AttributeDefinition> iterator() {
-        return this.attributes.iterator();
+    public Iterator<ColumnDefinition> iterator() {
+        return this.columns.iterator();
     }
 
     /**
-     * Collect all table attributes into single list.
+     * Collect all table columns into single list.
      *
-     * @param tableName  Table name
-     * @param dataSource Datasource
-     * @param userAttrs User defined attributes
-     * @return List of attributes
+     * @param tableName    Table name
+     * @param dataSource   Datasource
+     * @param customValues Custom values for columns
+     * @return List of columns
      * @throws SQLException if failed
      */
     @SuppressWarnings("LineLength")
-    private static List<AttributeDefinition> fetchAttributesFromDb(
+    private static List<ColumnDefinition> dbColumns(
             final String tableName,
             final DataSource dataSource,
-            final Map<String, String> userAttrs
+            final Map<String, String> customValues
     ) throws SQLException {
-        final List<AttributeDefinition> attrs = new ArrayList<>(16);
+        final List<ColumnDefinition> columns = new ArrayList<>(16);
         try (final Connection connection = dataSource.getConnection()) {
-            try (final ResultSet columns = Attributes.columnsMetaData(connection, tableName)) {
-                while (columns.next()) {
-                    //Skip auto increment attributes
-                    if (!"YES".equals(columns.getString("IS_AUTOINCREMENT"))) {
-                        attrs.add(new AttrBuilder(columns, userAttrs));
+            try (final ResultSet columnsMeta = Columns.columnsMetaData(connection, tableName)) {
+                while (columnsMeta.next()) {
+                    //Skip auto increment columns
+                    if (!"YES".equals(columnsMeta.getString("IS_AUTOINCREMENT"))) {
+                        columns.add(new ColumnDefinitionBuilder(columnsMeta, customValues));
                     }
                 }
-
             }
         }
-        return attrs;
+        return columns;
     }
 
     /**

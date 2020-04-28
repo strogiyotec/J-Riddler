@@ -1,4 +1,4 @@
 /**
  * Postgres data types representations.
  */
-package com.jriddler.attrs;
+package com.jriddler.columns;
