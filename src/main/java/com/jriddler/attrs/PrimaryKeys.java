@@ -1,7 +1,6 @@
 package com.jriddler.attrs;
 
 import lombok.SneakyThrows;
-import lombok.experimental.Delegate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -9,17 +8,17 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Primary keys of table.
  */
-public final class PrimaryKeys implements List<String> {
+public final class PrimaryKeys implements Iterable<String> {
 
     /**
      * List of primary key columns names.
      */
-    @Delegate
     private final List<String> primaryKeys;
 
     /**
@@ -80,5 +79,10 @@ public final class PrimaryKeys implements List<String> {
                 connection.getSchema(),
                 tableName
         );
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return this.primaryKeys.iterator();
     }
 }
