@@ -41,13 +41,30 @@ public final class MainTestCase extends TestDbInstance {
     }
 
     /**
-     * Test that new row is created.
+     * Test that row with foreign keys is created.
+     */
+    @Test
+    public void testTableWithFk() throws SQLException {
+        Main.main(
+                new String[]{
+                        "-table", "user_to_item",
+                        "-host", CONTAINER.getContainerIpAddress(),
+                        "-port", CONTAINER.getMappedPort(POSTGRESQL_PORT).toString(),
+                        "-name", CONTAINER.getUsername(),
+                        "-password", CONTAINER.getPassword(),
+                        "-db", CONTAINER.getDatabaseName(),
+                }
+        );
+    }
+
+    /**
+     * Test that new row was custom values is created.
      *
      * @throws SQLException If failed
      */
     @Test
     @SuppressWarnings("LineLength")
-    public void testMainWithCustomValue() throws SQLException {
+    public void testWithCustomValue() throws SQLException {
         Main.main(
                 new String[]{
                         "-table", "users",
