@@ -204,7 +204,7 @@ public final class SingleConnectionDataSource implements DataSource {
                 this.connection.destroyConnection();
                 log.log(Level.INFO, "Connection was closed");
             } else {
-                log.log(Level.INFO, "Connection desn't exist, can't be closed");
+                log.log(Level.INFO, "Connection doesn't exist, can't be closed");
             }
         }
     }
