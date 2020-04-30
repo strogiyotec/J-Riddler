@@ -1,5 +1,6 @@
 package com.jriddler.sql;
 
+import com.jriddler.cli.DbSettings;
 import lombok.extern.java.Log;
 
 import javax.sql.DataSource;
@@ -48,6 +49,27 @@ public final class SingleConnectionDataSource implements DataSource {
      * Autocommit.
      */
     private final boolean autoCommit;
+
+    /**
+     * Ctor.
+     * Creates datasource from dbSettings
+     *
+     * @param settings Db settings
+     */
+    public SingleConnectionDataSource(
+            final DbSettings settings
+    ) {
+        this(
+                settings.getUsername(),
+                settings.getPassword(),
+                String.format(
+                        "jdbc:postgresql://%s:%d/%s",
+                        settings.getHost(),
+                        settings.getPort(),
+                        settings.getDbName()
+                )
+        );
+    }
 
     /**
      * Ctor.

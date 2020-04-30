@@ -42,7 +42,7 @@ public final class Main {
     public static void main(final String[] args) throws SQLException {
         Main.setUpLogs();
         final UserInput userInput = Main.parsedInput(args);
-        final SingleConnectionDataSource dataSource = Main.dataSource(userInput);
+        final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(userInput);
         final FluentJdbc jdbc = new FluentJdbcBuilder()
                 .afterQueryListener(new LoggableInsertQuery())
                 .connectionProvider(dataSource)
@@ -76,6 +76,10 @@ public final class Main {
 
     /**
      * Insert new random row.
+     * If table has foreign keys
+     * then it recursively create new rows
+     * for tables pointed by foreign keys and
+     * save primary keys of those rows in customValues map
      *
      * @param customValues Custom values for columns
      * @param table        Table name
@@ -97,7 +101,7 @@ public final class Main {
                 );
         if (foreignKeys.hasKeys()) {
             for (final ForeignKey fkey : foreignKeys) {
-                //save fk value in custom values map
+                //save pk value in custom values map
                 //key is fk name
                 //value is generated value of table pointed by fk
                 customValues.put(
@@ -149,27 +153,6 @@ public final class Main {
                                 "No rows were created"
                         )
                 );
-    }
-
-    /**
-     * Create one connection data source.
-     *
-     * @param userInput UserInput
-     * @return DataSource
-     */
-    private static SingleConnectionDataSource dataSource(
-            final UserInput userInput
-    ) {
-        return new SingleConnectionDataSource(
-                userInput.getUsername(),
-                userInput.getPassword(),
-                String.format(
-                        "jdbc:postgresql://%s:%d/%s",
-                        userInput.getDbHost(),
-                        userInput.getPort(),
-                        userInput.getDbName()
-                )
-        );
     }
 
     /**

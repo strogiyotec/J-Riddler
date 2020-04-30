@@ -11,7 +11,7 @@ import java.util.Map;
  * Db settings from cli.
  */
 @Getter
-public final class UserInput {
+public final class UserInput implements DbSettings {
 
     /**
      * User specified parameters.
@@ -34,7 +34,7 @@ public final class UserInput {
      * Db host.
      */
     @Parameter(names = "-host", description = "Database host")
-    private String dbHost = "localhost";
+    private String host = "localhost";
 
     /**
      * Db port.

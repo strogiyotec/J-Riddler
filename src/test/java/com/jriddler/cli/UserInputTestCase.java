@@ -90,7 +90,7 @@ public final class UserInputTestCase {
                 CoreMatchers.is("postgres")
         );
         Assert.assertThat(
-                userInput.getDbHost(),
+                userInput.getHost(),
                 CoreMatchers.is("localhost")
         );
         Assert.assertThat(
