@@ -1,6 +1,5 @@
 package com.jriddler.sql;
 
-import com.jriddler.columns.ColumnDefinition;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.codejargon.fluentjdbc.api.query.listen.AfterQueryListener;
@@ -15,11 +14,6 @@ import java.util.logging.Level;
 @Log
 public final class LoggableInsertQuery implements AfterQueryListener {
 
-    /**
-     * List of inserted columns.
-     */
-    private final Iterable<ColumnDefinition> columns;
-
     @Override
     public void listen(final ExecutionDetails executionDetails) {
         if (executionDetails.success()) {
@@ -29,32 +23,13 @@ public final class LoggableInsertQuery implements AfterQueryListener {
                             "\n",
                             "\nExecution time {0}ms",
                             "Insert query:",
-                            "{1}Columns:",
-                            "{2}"
+                            "{1}"
                     ),
                     new Object[]{
                             executionDetails.executionTimeMs(),
                             executionDetails.sql(),
-                            this.columnsAsString(),
                     }
             );
         }
-    }
-
-    /**
-     * String representation of all columns.
-     *
-     * @return String representation
-     */
-    private String columnsAsString() {
-        final StringBuilder builder = new StringBuilder();
-        this.columns.forEach(column ->
-                builder
-                        .append("Name=")
-                        .append(column.name())
-                        .append(", Value=")
-                        .append(column.value())
-                        .append("\n"));
-        return builder.toString();
     }
 }

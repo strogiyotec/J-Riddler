@@ -85,7 +85,10 @@ public abstract class TestDbInstance {
      */
     @After
     public final void destroy() {
+        this.query.update("DELETE FROM managers").run();
+        this.query.update("DELETE FROM user_to_item").run();
         this.query.update("DELETE FROM users").run();
+        this.query.update("DELETE FROM items").run();
     }
 
 

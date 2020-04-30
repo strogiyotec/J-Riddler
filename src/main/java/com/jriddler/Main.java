@@ -1,15 +1,22 @@
 package com.jriddler;
 
 import com.beust.jcommander.JCommander;
-import com.jriddler.columns.Columns;
-import com.jriddler.columns.ColumnValue;
 import com.jriddler.cli.UserInput;
+import com.jriddler.columns.ColumnValue;
+import com.jriddler.columns.Columns;
+import com.jriddler.columns.fk.ForeignKey;
+import com.jriddler.columns.fk.ForeignKeys;
+import com.jriddler.columns.fk.ForeignKeysBuilder;
 import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
 import lombok.extern.java.Log;
+import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
+import org.codejargon.fluentjdbc.api.mapper.Mappers;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -36,8 +43,17 @@ public final class Main {
         Main.setUpLogs();
         final UserInput userInput = Main.parsedInput(args);
         final SingleConnectionDataSource dataSource = Main.dataSource(userInput);
+        final FluentJdbc jdbc = new FluentJdbcBuilder()
+                .afterQueryListener(new LoggableInsertQuery())
+                .connectionProvider(dataSource)
+                .build();
         try {
-            Main.insertRandomRow(userInput, dataSource);
+            Main.insertRowWithForeignKeys(
+                    userInput.getTable(),
+                    userInput.getUserValues(),
+                    dataSource,
+                    jdbc
+            );
         } finally {
             dataSource.destroy();
         }
@@ -61,32 +77,78 @@ public final class Main {
     /**
      * Insert new random row.
      *
-     * @param userInput  User Input
-     * @param dataSource Datasource
+     * @param customValues Custom values for columns
+     * @param table        Table name
+     * @param dataSource   Datasource
+     * @param jdbc         Jdbc
+     * @return Generated keys
+     * @throws SQLException If failed
      */
-    private static void insertRandomRow(
-            final UserInput userInput,
-            final SingleConnectionDataSource dataSource
-    ) {
+    private static Map<String, Object> insertRowWithForeignKeys(
+            final String table,
+            final Map<String, String> customValues,
+            final SingleConnectionDataSource dataSource,
+            final FluentJdbc jdbc
+    ) throws SQLException {
+        final ForeignKeys foreignKeys =
+                new ForeignKeysBuilder(
+                        dataSource,
+                        table
+                );
+        if (foreignKeys.hasKeys()) {
+            for (final ForeignKey fkey : foreignKeys) {
+                //save fk value in custom values map
+                //key is fk name
+                //value is generated value of table pointed by fk
+                customValues.put(
+                        fkey.fkColumnName(),
+                        Main.insertRowWithForeignKeys(
+                                fkey.pkTableName(),
+                                new HashMap<>(),
+                                dataSource,
+                                jdbc
+                        ).get(fkey.pkColumnName()).toString()
+                );
+            }
+        }
         final Columns columns = new Columns(
-                userInput.getTable(),
+                table,
                 dataSource,
-                userInput.getUserValues()
+                customValues
         );
-        new FluentJdbcBuilder()
-                .afterQueryListener(new LoggableInsertQuery(columns))
-                .connectionProvider(dataSource)
-                .build()
+        return Main.insert(columns, table, jdbc);
+    }
+
+    /**
+     * Execute insert query.
+     *
+     * @param columns Columns to insert
+     * @param table   Table
+     * @param jdbc    Jdbc
+     * @return Generated keys as map
+     * @throws IllegalStateException If no generated keys
+     */
+    private static Map<String, Object> insert(
+            final Columns columns,
+            final String table,
+            final FluentJdbc jdbc
+    ) {
+        return jdbc
                 .query()
                 .update(
                         new InsertQuery(
                                 columns,
-                                userInput.getTable()
+                                table
                         ).create()
                 )
-                .params(
-                        ColumnValue.values(columns)
-                ).run();
+                .params(ColumnValue.values(columns))
+                .runFetchGenKeys(Mappers.map())
+                .firstKey()
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "No rows were created"
+                        )
+                );
     }
 
     /**

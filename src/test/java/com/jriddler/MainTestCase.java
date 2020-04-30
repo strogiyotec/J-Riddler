@@ -42,8 +42,11 @@ public final class MainTestCase extends TestDbInstance {
 
     /**
      * Test that row with foreign keys is created.
+     *
+     * @throws SQLException If failed
      */
     @Test
+    @SuppressWarnings("LineLength")
     public void testTableWithFk() throws SQLException {
         Main.main(
                 new String[]{
