@@ -8,6 +8,7 @@
     <name>J-Riddler</name>
     <packaging>jar</packaging>
     <description>Random data generator for Postgres</description>
+	<ur>https://github.com/strogiyotec/J-Riddler</url>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
