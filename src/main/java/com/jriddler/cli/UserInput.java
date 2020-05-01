@@ -70,4 +70,6 @@ public final class UserInput implements DbSettings {
     @Parameter(names = "-db", description = "Database name")
     private String dbName;
 
+    @Parameter(names = "-version", description = "Print current version")
+    private boolean version = false;
 }
