@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @SuppressWarnings("LineLength")
-public final class SqlConstraintsFetch implements SqlOperation<Map<String, List<Constraint>>> {
+public final class SqlConstraintsFetch {
 
     /**
      * Table name.
@@ -34,7 +34,6 @@ public final class SqlConstraintsFetch implements SqlOperation<Map<String, List<
      *
      * @return Constraints per column
      */
-    @Override
     public Map<String, List<Constraint>> perform() {
         final List<Map<String, Object>> constraints = this.query.select(this.query()).listResult(Mappers.map());
         return constraints
