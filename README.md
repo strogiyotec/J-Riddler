@@ -1,31 +1,37 @@
 # J-Riddler
-J-Riddler is a random data generator for postgres
+J-Riddler is a random row generator for postgres
 
 ## Motivation
 
-A lot of developers use Database Migration Tools such as [Flyway](https://flywaydb.org/)
+A lot of developers use Database Migration Tools such as [Flyway](https://flywaydb.org/) in order to have the same database schema in each environment. But what if I
+need an actual data inside tables ? 
 
-**However** these tools allow you to have the same schema in production and local environments,**not data**.
+## Problem
+Let's say you have a **users** table with the following columns : `id,name,surname,active,birthday` and you want to test that your search engine is able
+to find a user with name `Bob`. In order to do this you need a user with this name in table. Plain old solution is to use insert query
+`
+insert into users(id,name,surname,active,birthday) values (1,'Bob','Anderson',true,now())
+` 
+If you are tired from writing these huge queries then **J-Riddle** is here to help you.
 
-Let's say you want to test pagination , in order to do this you need 42 rows in table,
-you don't care about the quality of data , the only thing you care about is the existence of this data. 
-
-
+## Definition
 
 **J-Riddler** gives you a plain and simple CLI to fill these tables instead of writing huge **INSERT** queries by your own.
-The final jar size is 1MB(can be improved using [Graal native images](https://www.graalvm.org/))
+The final jar size is 1MB in size(can be improved using [Graal native images](https://www.graalvm.org/))
 
+## Solution
 
-## Contributions
+The previous insert query could be replaced using **J-Riddler** command
 
-Contributions are welcome! Please, open an issue before submit any kind (ideas,
-documentation, code, ...) of contribution.
+`
+ jriddler -table users -Vname=Bob
+` 
+  Isn't it faster ? This command will create a new user with name **Bob** and random values for other columns (because we are interested in name only).
 
-Use this command to check your build
+Another example with Foreign keys. Ley's say you have the following tables: `group(id,name),students(id,group_id,name)`. 
+In order to create a user you would run two insert queries: first to create a group and second to create a user. With **J-Riddle** you
+can use the command above , it will take care about **Foreign key** dependencies and will create a new group fow you.
 
-```
-mvn checkstyle:check test
-```
 
 # Supported types
 1. Text
@@ -35,8 +41,8 @@ mvn checkstyle:check test
 5. Boolean 
 
 # Features to be implemented
-1. If table has FK constraint then insert row in FK table
-2. Check value constraints (bigger than 0, min length etc.)
+- [X] Support Foreign keys 
+- [ ] Support Constraints 
 
 # Build and run
 
@@ -71,7 +77,7 @@ Name=active, Value=true
 
 ## Custom values
 
-If you want to specify custom value for column then use -V(custom value) attribute
+If you want to specify custom value for column then use **-V**(custom value) attribute
 
 Example:
 `
@@ -81,3 +87,13 @@ java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postg
 in this case **J-Riddler** will use **test@gmail.com** as a value for **email** and random values for other columns
 
 
+## Contributions
+
+Contributions are welcome! Please, open an issue before submit any kind (ideas,
+documentation, code, ...) of contribution.
+
+Use this command to check your build
+
+```
+mvn checkstyle:check test
+```
