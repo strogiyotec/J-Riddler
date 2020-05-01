@@ -70,6 +70,9 @@ public final class UserInput implements DbSettings {
     @Parameter(names = "-db", description = "Database name")
     private String dbName;
 
+    /**
+     * Show current version of J-Riddler.
+     */
     @Parameter(names = "-version", description = "Print current version")
-    private boolean version = false;
+    private boolean version;
 }

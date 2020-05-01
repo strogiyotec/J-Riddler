@@ -31,6 +31,7 @@ public final class Main {
 
     /**
      * Main.
+     * Doesn't insert row if need to show version
      *
      * @param args Argc
      * @throws SQLException If failed
