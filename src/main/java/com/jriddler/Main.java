@@ -9,7 +9,6 @@ import com.jriddler.columns.fk.ForeignKeys;
 import com.jriddler.columns.fk.ForeignKeysBuilder;
 import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
-import lombok.extern.java.Log;
 import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 import org.codejargon.fluentjdbc.api.mapper.Mappers;
@@ -17,12 +16,10 @@ import org.codejargon.fluentjdbc.api.mapper.Mappers;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * Entry point.
  */
-@Log
 public final class Main {
 
     /**
@@ -40,8 +37,11 @@ public final class Main {
      */
     @SuppressWarnings("LineLength")
     public static void main(final String[] args) throws SQLException {
-        Main.setUpLogs();
         final UserInput userInput = Main.parsedInput(args);
+        if (userInput.isVersion()) {
+            System.out.println(new Version().asString());
+            return;
+        }
         final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(userInput);
         final FluentJdbc jdbc = new FluentJdbcBuilder()
                 .afterQueryListener(new LoggableInsertQuery())
@@ -153,17 +153,5 @@ public final class Main {
                                 "No rows were created"
                         )
                 );
-    }
-
-    /**
-     * Setup logging.
-     */
-    private static void setUpLogs() {
-        final String logConfig = Main.class
-                .getClassLoader()
-                .getResource("jul-log.properties")
-                .getFile();
-        System.setProperty("java.util.logging.config.file", logConfig);
-        log.log(Level.CONFIG, "Logging is configured");
     }
 }

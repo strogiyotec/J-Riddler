@@ -1,7 +1,6 @@
 package com.jriddler.sql;
 
 import com.jriddler.cli.DbSettings;
-import lombok.extern.java.Log;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -9,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -17,7 +15,6 @@ import java.util.logging.Logger;
  * This connection will be committed and closed when destroy
  * method is called
  */
-@Log
 public final class SingleConnectionDataSource implements DataSource {
 
     /**
@@ -224,12 +221,9 @@ public final class SingleConnectionDataSource implements DataSource {
         synchronized (this.monitor) {
             if (this.connection != null) {
                 this.connection.destroyConnection();
-                log.log(Level.INFO, "Connection was closed");
+                System.out.println("Connection was closed");
             } else {
-                log.log(
-                        Level.INFO,
-                        "Connection doesn't exist, can't be closed"
-                );
+                System.out.println("Connection doesn't exist, can't be closed");
             }
         }
     }
