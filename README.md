@@ -28,9 +28,9 @@ The previous insert query could be replaced using **J-Riddler** command
 ` 
   Isn't it faster ? This command will create a new user with name **Bob** and random values for other columns (because we are interested in name only).
 
-Another example with Foreign keys. Ley's say you have the following tables: `group(id,name),students(id,group_id,name)`. 
+Another example with Foreign keys. Ley's say you have the following tables: `groups(id,name),students(id,group_id,name)`. 
 In order to create a user you would run two insert queries: first to create a group and second to create a user. With **J-Riddle** you
-can use the command above , it will take care about **Foreign key** dependencies and will create a new group fow you.
+can use this command `jriddler -table students`, it will take care about **Foreign key** dependencies and will create a new group row fow you.
 
 
 # Supported types
