@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.text;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;

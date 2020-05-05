@@ -75,4 +75,10 @@ public final class UserInput implements DbSettings {
      */
     @Parameter(names = "-version", description = "Print current version")
     private boolean version;
+
+    /**
+     * Show help.
+     */
+    @Parameter(names = "-help", description = "Print help information")
+    private boolean help;
 }

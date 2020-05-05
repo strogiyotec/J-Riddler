@@ -1,9 +1,9 @@
-package com.jriddler;
+package com.jriddler.text;
 
 /**
  * Shows version information.
  */
-public final class Version {
+public final class Version implements Text {
 
     /**
      * Current version.
@@ -15,7 +15,9 @@ public final class Version {
      *
      * @return Version
      */
-    String asString() {
+    @Override
+    public String asString() {
         return "JRiddler version \"" + VERSION + "\"";
     }
 }
+

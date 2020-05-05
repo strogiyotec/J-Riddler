@@ -9,6 +9,7 @@ import com.jriddler.columns.fk.ForeignKeys;
 import com.jriddler.columns.fk.ForeignKeysBuilder;
 import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
+import com.jriddler.text.Version;
 import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 import org.codejargon.fluentjdbc.api.mapper.Mappers;
@@ -42,6 +43,9 @@ public final class Main {
         if (userInput.isVersion()) {
             System.out.println(new Version().asString());
             return;
+        }
+        if(userInput.isHelp()){
+            System.out.println();
         }
         final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(userInput);
         final FluentJdbc jdbc = new FluentJdbcBuilder()
