@@ -68,7 +68,6 @@ public final class MainTestCase extends TestDbInstance {
     @Test
     @SuppressWarnings("LineLength")
     public void testWithCustomValue() throws SQLException {
-        System.out
         Main.main(
                 new String[]{
                         "-table", "users",
