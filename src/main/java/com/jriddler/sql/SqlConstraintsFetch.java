@@ -34,7 +34,7 @@ public final class SqlConstraintsFetch {
      *
      * @return Constraints per column
      */
-    public Map<String, List<Constraint>> perform() {
+    public Map<String, List<PgConstraint>> perform() {
         final List<Map<String, Object>> constraints = this.query.select(this.query()).listResult(Mappers.map());
         return constraints
                 .stream()

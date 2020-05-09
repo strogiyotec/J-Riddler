@@ -2,6 +2,7 @@ package com.jriddler.sql;
 
 import com.jriddler.TestDbInstance;
 import com.jriddler.contraint.Constraint;
+import com.jriddler.contraint.PgConstraint;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,7 +38,7 @@ public final class SqlConstraintsFetchTestCase extends TestDbInstance {
      */
     @Test
     public void testFetchConstraints() {
-        final Map<String, List<Constraint>> constraints =
+        final Map<String, List<PgConstraint>> constraints =
                 this.sqlConstraint.perform();
         Assert.assertThat(
                 constraints.get("id").get(0).name(),
