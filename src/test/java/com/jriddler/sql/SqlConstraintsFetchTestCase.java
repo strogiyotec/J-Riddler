@@ -1,7 +1,6 @@
 package com.jriddler.sql;
 
 import com.jriddler.TestDbInstance;
-import com.jriddler.contraint.Constraint;
 import com.jriddler.contraint.PgConstraint;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
