@@ -1,6 +1,5 @@
 package com.jriddler.sql;
 
-import com.jriddler.contraint.Constraint;
 import com.jriddler.contraint.PgConstraint;
 import lombok.AllArgsConstructor;
 import org.codejargon.fluentjdbc.api.mapper.Mappers;

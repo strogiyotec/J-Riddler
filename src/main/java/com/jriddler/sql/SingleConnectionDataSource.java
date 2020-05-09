@@ -3,6 +3,7 @@ package com.jriddler.sql;
 import com.jriddler.cli.DbSettings;
 
 import javax.sql.DataSource;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +17,11 @@ import java.util.logging.Logger;
  * method is called
  */
 public final class SingleConnectionDataSource implements DataSource {
+
+    /**
+     * Output.
+     */
+    private final PrintStream output;
 
     /**
      * Lock monitor.
@@ -51,10 +57,12 @@ public final class SingleConnectionDataSource implements DataSource {
      * Ctor.
      * Creates datasource from dbSettings
      *
+     * @param output   Print output
      * @param settings Db settings
      */
     public SingleConnectionDataSource(
-            final DbSettings settings
+            final DbSettings settings,
+            final PrintStream output
     ) {
         this(
                 settings.getUsername(),
@@ -64,7 +72,8 @@ public final class SingleConnectionDataSource implements DataSource {
                         settings.getHost(),
                         settings.getPort(),
                         settings.getDbName()
-                )
+                ),
+                output
         );
     }
 
@@ -74,18 +83,21 @@ public final class SingleConnectionDataSource implements DataSource {
      *
      * @param username Username
      * @param password Password
+     * @param output   Print output
      * @param url      Url
      */
     public SingleConnectionDataSource(
             final String username,
             final String password,
-            final String url
+            final String url,
+            final PrintStream output
     ) {
         this(
                 username,
                 password,
                 url,
-                false
+                false,
+                output
         );
     }
 
@@ -95,18 +107,21 @@ public final class SingleConnectionDataSource implements DataSource {
      * @param connection Preconfigured connection
      * @param username   Username
      * @param password   Password
+     * @param output     Print output
      * @param url        Url
      */
     public SingleConnectionDataSource(
             final SingleSqlConnection connection,
             final String username,
             final String password,
-            final String url
+            final String url,
+            final PrintStream output
     ) {
         this(
                 username,
                 password,
-                url
+                url,
+                output
         );
         this.connection = connection;
     }
@@ -118,16 +133,19 @@ public final class SingleConnectionDataSource implements DataSource {
      * @param password   Password
      * @param url        Url
      * @param autoCommit Autocommit mode
+     * @param output     Print Output
      */
     public SingleConnectionDataSource(
             final String username,
             final String password,
             final String url,
-            final boolean autoCommit
+            final boolean autoCommit,
+            final PrintStream output
     ) {
         this.username = username;
         this.password = password;
         this.url = url;
+        this.output = output;
         this.autoCommit = autoCommit;
     }
 
@@ -155,10 +173,14 @@ public final class SingleConnectionDataSource implements DataSource {
             final String connectionPassword
     ) throws SQLException {
         if (!this.username.equals(connectionUserName)) {
-            throw new IllegalArgumentException("New value for username");
+            throw new IllegalArgumentException(
+                    "New value for username is not allowed"
+            );
         }
         if (!this.password.equals(connectionPassword)) {
-            throw new IllegalArgumentException("New value for password");
+            throw new IllegalArgumentException(
+                    "New value for password is not allowed"
+            );
         }
         return this.getConnection();
     }
@@ -221,9 +243,11 @@ public final class SingleConnectionDataSource implements DataSource {
         synchronized (this.monitor) {
             if (this.connection != null) {
                 this.connection.destroyConnection();
-                System.out.println("Connection was closed");
+                this.output.println("Connection was closed");
             } else {
-                System.out.println("Connection doesn't exist, can't be closed");
+                this.output.println(
+                        "Connection doesn't exist, can't be closed"
+                );
             }
         }
     }

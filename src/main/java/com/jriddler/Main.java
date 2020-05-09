@@ -1,6 +1,5 @@
 package com.jriddler;
 
-import com.beust.jcommander.JCommander;
 import com.jriddler.cli.UserInput;
 import com.jriddler.columns.ColumnValue;
 import com.jriddler.columns.Columns;
@@ -15,71 +14,90 @@ import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;
 import org.codejargon.fluentjdbc.api.mapper.Mappers;
 
+import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Entry point.
  */
-public final class Main {
+public final class Main implements Callable<Void> {
+
+    /**
+     * Output.
+     */
+    private final PrintStream output;
+
+    /**
+     * User input.
+     */
+    private final UserInput input;
 
     /**
      * Ctor.
+     *
+     * @param output Output stream
+     * @param input  User input
      */
-    private Main() {
-
+    public Main(final PrintStream output, final UserInput input) {
+        this.output = output;
+        this.input = input;
     }
 
     /**
-     * Main.
-     * Doesn't insert row if need to show version
-     * TODO remove static methods and add ctor to Main
+     * Ctor.
+     * Uses default System out
      *
-     * @param args Argc
-     * @throws SQLException If failed
+     * @param input User input
      */
+    public Main(final UserInput input) {
+        this.input = input;
+        this.output = System.out;
+    }
+
+    @Override
     @SuppressWarnings("LineLength")
-    public static void main(final String[] args) throws SQLException {
-        final UserInput userInput = Main.parsedInput(args);
-        if (userInput.isVersion()) {
-            System.out.println(new Version().asString());
-            return;
+    public Void call() throws SQLException {
+        if (this.input.isVersion()) {
+            this.output.print(new Version().asString());
+            return null;
         }
-        if (userInput.isHelp()) {
-            System.out.println(new Help().asString());
-            return;
+        if (this.input.isHelp()) {
+            this.output.print(new Help().asString());
+            return null;
         }
-        final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(userInput);
+        final SingleConnectionDataSource dataSource = new SingleConnectionDataSource(this.input, this.output);
         final FluentJdbc jdbc = new FluentJdbcBuilder()
                 .afterQueryListener(new LoggableInsertQuery())
                 .connectionProvider(dataSource)
                 .build();
         try {
             Main.insertRowWithForeignKeys(
-                    userInput.getTable(),
-                    userInput.getUserValues(),
+                    this.input.getTable(),
+                    this.input.getUserValues(),
                     dataSource,
                     jdbc
             );
         } finally {
             dataSource.destroy();
         }
+        return null;
     }
 
     /**
-     * Convert args to UserInput instance.
+     * Main.
+     * Doesn't insert row if need to show version
      *
-     * @param args List of cli args
-     * @return UserInput
+     * @param args Argc
+     * @throws SQLException If failed
      */
-    private static UserInput parsedInput(final String[] args) {
-        final UserInput userInput = new UserInput();
-        JCommander.newBuilder()
-                .addObject(userInput)
-                .build()
-                .parse(args);
-        return userInput;
+    public static void main(final String[] args) throws SQLException {
+        new Main(
+                System.out,
+                new UserInput(args)
+        ).call();
     }
 
     /**

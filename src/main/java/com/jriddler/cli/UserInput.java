@@ -1,8 +1,10 @@
 package com.jriddler.cli;
 
 import com.beust.jcommander.DynamicParameter;
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,37 @@ import java.util.Map;
  * Db settings from cli.
  */
 @Getter
+@NoArgsConstructor
 public final class UserInput implements DbSettings {
+
+    /**
+     * Default db port.
+     */
+    private static final int DEFAULT_PORT = 5432;
+
+    /**
+     * Ctor.
+     * Creates input from cli argc
+     *
+     * @param args Cli args
+     */
+    public UserInput(final String[] args) {
+        final UserInput input = new UserInput();
+        JCommander.newBuilder()
+                .addObject(input)
+                .build()
+                .parse(args);
+        this.userValues = input.userValues;
+        this.host = input.host;
+        this.port = input.port;
+        this.username = input.username;
+        this.table = input.table;
+        this.password = input.password;
+        this.dbName = input.dbName;
+        this.version = input.version;
+        this.help = input.help;
+
+    }
 
     /**
      * User specified parameters.
@@ -24,11 +56,6 @@ public final class UserInput implements DbSettings {
             description = "Predefined values to use during insert instead of random data"
     )
     private Map<String, String> userValues = new HashMap<>();
-
-    /**
-     * Default db port.
-     */
-    private static final int DEFAULT_PORT = 5432;
 
     /**
      * Db host.
