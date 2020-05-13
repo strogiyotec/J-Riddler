@@ -21,7 +21,10 @@ import static org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT;
 public final class MainTestCase extends TestDbInstance {
 
     /**
-     * Test that new row is created.
+     * Test that new random row is created.
+     * This method inserts new user
+     * and check that users table is not empty
+     * and contains new inserted user
      *
      * @throws SQLException If failed
      */
@@ -49,6 +52,10 @@ public final class MainTestCase extends TestDbInstance {
 
     /**
      * Test that row with foreign keys is created.
+     * This method inserts new user_to_item row
+     * as this table contains two foreign keys
+     * to users and items tables then
+     * new users and items rows will be created as well
      *
      * @throws SQLException If failed
      */
@@ -71,6 +78,18 @@ public final class MainTestCase extends TestDbInstance {
         Assert.assertThat(
                 this.query
                         .select("SELECT count(*) FROM user_to_item;")
+                        .singleResult(Mappers.singleLong()),
+                Matchers.greaterThan(0L)
+        );
+        Assert.assertThat(
+                this.query
+                        .select("SELECT count(*) FROM users;")
+                        .singleResult(Mappers.singleLong()),
+                Matchers.greaterThan(0L)
+        );
+        Assert.assertThat(
+                this.query
+                        .select("SELECT count(*) FROM items;")
                         .singleResult(Mappers.singleLong()),
                 Matchers.greaterThan(0L)
         );
