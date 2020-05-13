@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Db settings from cli.
+ * Random row settings from cli.
  */
 @Getter
 @NoArgsConstructor
