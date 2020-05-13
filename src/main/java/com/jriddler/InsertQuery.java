@@ -1,6 +1,7 @@
 package com.jriddler;
 
 import com.jriddler.columns.ColumnName;
+import com.jriddler.text.Text;
 import lombok.AllArgsConstructor;
 
 import java.util.Iterator;
@@ -9,7 +10,7 @@ import java.util.Iterator;
  * Create insert query for table.
  */
 @AllArgsConstructor
-public final class InsertQuery {
+public final class InsertQuery implements Text {
 
     /**
      * List of column names.
@@ -27,7 +28,8 @@ public final class InsertQuery {
      *
      * @return Insert query
      */
-    public String create() {
+    @Override
+    public String asString() {
         final StringBuilder insert = new StringBuilder(16);
         insert.append("INSERT INTO ")
                 .append(this.tableName)

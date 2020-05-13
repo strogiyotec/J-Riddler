@@ -48,7 +48,7 @@ public final class InsertQueryTestCase {
     @Test
     public void testBuild() {
         Assert.assertThat(
-                this.insertQuery.create(),
+                this.insertQuery.asString(),
                 CoreMatchers.is(
                         String.join(
                                 "\n",

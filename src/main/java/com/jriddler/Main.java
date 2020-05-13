@@ -103,7 +103,7 @@ public final class Main implements Callable<Void> {
     /**
      * Insert new random row.
      * If table has foreign keys
-     * then it recursively create new rows
+     * then it recursively creates new rows
      * for tables pointed by foreign keys and
      * save primary keys of those rows in customValues map
      *
@@ -169,7 +169,7 @@ public final class Main implements Callable<Void> {
                         new InsertQuery(
                                 columns,
                                 table
-                        ).create()
+                        ).asString()
                 )
                 .params(ColumnValue.values(columns))
                 .runFetchGenKeys(Mappers.map())
