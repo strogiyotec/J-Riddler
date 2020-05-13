@@ -17,6 +17,11 @@ import java.util.Map;
 public final class UserInput implements DbSettings {
 
     /**
+     * Default db host.
+     */
+    private static final String DEFAULT_HOST = "localhost";
+
+    /**
      * Default db port.
      */
     private static final int DEFAULT_PORT = 5432;
@@ -61,7 +66,7 @@ public final class UserInput implements DbSettings {
      * Db host.
      */
     @Parameter(names = "-host", description = "Database host")
-    private String host = "localhost";
+    private String host = DEFAULT_HOST;
 
     /**
      * Db port.
