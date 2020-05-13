@@ -5,14 +5,13 @@ import com.jriddler.text.Help;
 import com.jriddler.text.Version;
 import org.codejargon.fluentjdbc.api.mapper.Mappers;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 import static org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT;
 
@@ -41,8 +40,10 @@ public final class MainTestCase extends TestDbInstance {
                 })
         ).call();
         Assert.assertThat(
-                this.query.select("SELECT * FROM users;").listResult(Mappers.map()).size(),
-                CoreMatchers.is(1)
+                this.query
+                        .select("SELECT count(*) FROM users;")
+                        .singleResult(Mappers.singleLong()),
+                Matchers.greaterThan(0L)
         );
     }
 
@@ -67,6 +68,12 @@ public final class MainTestCase extends TestDbInstance {
                         }
                 )
         ).call();
+        Assert.assertThat(
+                this.query
+                        .select("SELECT count(*) FROM user_to_item;")
+                        .singleResult(Mappers.singleLong()),
+                Matchers.greaterThan(0L)
+        );
     }
 
     /**
@@ -92,20 +99,21 @@ public final class MainTestCase extends TestDbInstance {
                         }
                 )
         ).call();
-        final List<Map<String, Object>> users =
-                this.query
-                        .select("SELECT * FROM users where name='Almas';")
-                        .listResult(Mappers.map());
-
-        // name is equals to name from user columns
+        // user with custom name was created
         Assert.assertThat(
-                users.get(0).get("name").toString(),
+                this.query.select(
+                        String.format(
+                                "SELECT name FROM users WHERE name='%s' LIMIT 1;",
+                                customName
+                        )
+                ).singleResult(Mappers.singleString()),
                 CoreMatchers.is(customName)
         );
     }
 
     /**
      * Test that help information was shown.
+     * It uses {@link ByteArrayOutputStream} in order to keep output info
      *
      * @throws Exception If failed
      */
@@ -134,6 +142,7 @@ public final class MainTestCase extends TestDbInstance {
 
     /**
      * Test that version information was shown.
+     * It uses {@link ByteArrayOutputStream} in order to keep output info
      *
      * @throws Exception If failed
      */
@@ -141,9 +150,9 @@ public final class MainTestCase extends TestDbInstance {
     @SuppressWarnings("LineLength")
     public void testPrintVersion() throws Exception {
         try (final ByteArrayOutputStream storage = new ByteArrayOutputStream()) {
-            try (final PrintStream stream = new PrintStream(storage)) {
+            try (final PrintStream output = new PrintStream(storage)) {
                 new Main(
-                        stream,
+                        output,
                         new UserInput(
                                 new String[]{
                                         "-version",
