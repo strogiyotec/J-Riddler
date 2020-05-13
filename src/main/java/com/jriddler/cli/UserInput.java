@@ -28,7 +28,7 @@ public final class UserInput implements DbSettings {
 
     /**
      * Ctor.
-     * Creates input from cli argc
+     * Creates input from cli args
      *
      * @param args Cli args
      */
