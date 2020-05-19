@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Build column definition and store it in origin.
@@ -89,68 +90,46 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
      * @param customValues Custom values for columns
      * @return Random value columns
      */
-    @SuppressWarnings("CyclomaticComplexity")
+    @SuppressWarnings({"ReturnCount", "LineLength"})
     private static ColumnDefinition randomValueColumn(
             final int type,
             final int length,
             final String name,
             final Map<String, String> customValues
     ) {
-        final ColumnDefinition column;
+        final Optional<String> userDefinedValue =
+                Optional.ofNullable(customValues.get(name));
         if (type == Types.INTEGER) {
-            if (customValues.containsKey(name)) {
-                column = new IntColumn(
-                        name,
-                        Integer.parseInt(customValues.get(name))
-                );
-            } else {
-                column = new IntColumn(name);
-            }
-        } else if (type == Types.VARCHAR) {
-            if (customValues.containsKey(name)) {
-                column = new VarCharColumn(
-                        name,
-                        length,
-                        customValues.get(name)
-                );
-            } else {
-                column = new VarCharColumn(name, length);
-            }
-        } else if (type == Types.BIT) {
-            if (customValues.containsKey(name)) {
-                column = new BoolColumn(
-                        name,
-                        Boolean.parseBoolean(customValues.get(name))
-                );
-            } else {
-                column = new BoolColumn(name);
-            }
-        } else if (type == Types.BIGINT) {
-            if (customValues.containsKey(name)) {
-                column = new BigIntColumn(
-                        name,
-                        Long.parseLong(customValues.get(name))
-                );
-            } else {
-                column = new BigIntColumn(name);
-            }
-        } else if (type == Types.TIMESTAMP) {
-            if (customValues.containsKey(name)) {
-                column = new TimeStampColumn(
-                        name,
-                        customValues.get(name)
-                );
-            } else {
-                column = new TimeStampColumn(name);
-            }
-        } else {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Column with name [%s] doesn't exist",
-                            name
-                    )
-            );
+            return userDefinedValue
+                    .map(value -> new IntColumn(name, Integer.parseInt(value)))
+                    .orElse(new IntColumn(name));
         }
-        return column;
+        if (type == Types.VARCHAR) {
+            return userDefinedValue
+                    .map(value -> new VarCharColumn(name, length, value))
+                    .orElse(new VarCharColumn(name, length));
+        }
+        if (type == Types.BIT) {
+            return userDefinedValue
+                    .map(value -> new BoolColumn(name, Boolean.parseBoolean(value)))
+                    .orElse(new BoolColumn(name));
+        }
+        if (type == Types.BIGINT) {
+            return userDefinedValue
+                    .map(value -> new BigIntColumn(name, Long.parseLong(value)))
+                    .orElse(new BigIntColumn(name));
+        }
+        if (type == Types.TIMESTAMP) {
+            return userDefinedValue
+                    .map(value -> new TimeStampColumn(name, value))
+                    .orElse(new TimeStampColumn(name));
+        }
+
+        throw new IllegalArgumentException(
+                String.format(
+                        "Column with name [%s] doesn't exist",
+                        name
+                )
+        );
     }
 }

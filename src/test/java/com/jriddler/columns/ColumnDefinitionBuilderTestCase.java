@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.sql.Types;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 
 /**
  * Test Definition factory.
@@ -93,6 +94,19 @@ public final class ColumnDefinitionBuilderTestCase {
                 definition.value().toString().length(),
                 CoreMatchers.is(10)
         );
+    }
+
+    /**
+     * Test that throws exception when custom value is too long.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidLengthVarchar() {
+        new ColumnDefinitionBuilder(
+                Types.VARCHAR,
+                2,
+                "name",
+                Collections.singletonMap("name", "Long value")
+        ).value();
     }
 
     /**
