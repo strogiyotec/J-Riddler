@@ -8,7 +8,7 @@
     <name>J-Riddler</name>
     <packaging>jar</packaging>
     <description>Random data generator for Postgres</description>
-	<url>https://github.com/strogiyotec/J-Riddler</url>
+    <url>https://github.com/strogiyotec/J-Riddler</url>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -143,6 +143,31 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>com/jriddler/sql/SingleConnectionDataSource.class</exclude>
+                        <exclude>com/jriddler/sql/SingleSqlConnection.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
