@@ -32,6 +32,36 @@ public final class ColumnDefinitionBuilderTestCase {
     }
 
     /**
+     * Test that smallint is represented as int.
+     */
+    @Test
+    public void testSmallInt() {
+        Assert.assertThat(
+                new ColumnDefinitionBuilder(
+                        Types.SMALLINT,
+                        4,
+                        "age"
+                ).value(),
+                CoreMatchers.instanceOf(Integer.class)
+        );
+    }
+
+    /**
+     * Test that tinyint is represented as int.
+     */
+    @Test
+    public void testTinyInt() {
+        Assert.assertThat(
+                new ColumnDefinitionBuilder(
+                        Types.TINYINT,
+                        4,
+                        "age"
+                ).value(),
+                CoreMatchers.instanceOf(Integer.class)
+        );
+    }
+
+    /**
      * Test create long columns.
      */
     @Test

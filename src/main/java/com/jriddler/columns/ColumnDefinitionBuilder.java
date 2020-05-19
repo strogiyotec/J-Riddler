@@ -99,7 +99,7 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
     ) {
         final Optional<String> userDefinedValue =
                 Optional.ofNullable(customValues.get(name));
-        if (type == Types.INTEGER) {
+        if (type == Types.INTEGER || type == Types.TINYINT || type == Types.SMALLINT) {
             return userDefinedValue
                     .map(value -> new IntColumn(name, Integer.parseInt(value)))
                     .orElse(new IntColumn(name));
