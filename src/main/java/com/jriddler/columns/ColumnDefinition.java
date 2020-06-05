@@ -1,5 +1,7 @@
 package com.jriddler.columns;
 
+import java.sql.Types;
+
 /**
  * Definition of column in db.
  */
@@ -7,35 +9,27 @@ package com.jriddler.columns;
 public interface ColumnDefinition extends ColumnName, ColumnValue {
 
     /**
-     * Auto incremented columns.
+     * Check if given sql type is int.
+     *
+     * @param type Sql type
+     * @return True if type is int
      */
-    ColumnDefinition AUTO_INCR = new AutoIncremented();
-
-    /**
-     * Auto generated columns.
-     */
-    final class AutoIncremented implements ColumnDefinition {
-
-        @Override
-        public Object value() {
-            throw new UnsupportedOperationException(
-                    "AutoIncremented columns doesn't have value"
-            );
-        }
-
-        @Override
-        public int size() {
-            throw new UnsupportedOperationException(
-                    "AutoIncremented columns doesn't have size"
-            );
-        }
-
-        @Override
-        public String name() {
-            throw new UnsupportedOperationException(
-                    "AutoIncremented columns doesn't have name"
-            );
-        }
+    static boolean isInt(final int type) {
+        return type == Types.INTEGER
+                || type == Types.TINYINT
+                || type == Types.SMALLINT;
     }
 
+    /**
+     * Check if given sql type is string.
+     *
+     * @param type Sql type
+     * @return True if type is string
+     */
+    static boolean isString(final int type) {
+        return type == Types.VARCHAR
+                || type == Types.CHAR
+                || type == Types.NVARCHAR
+                || type == Types.NCHAR;
+    }
 }

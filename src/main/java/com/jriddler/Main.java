@@ -9,6 +9,7 @@ import com.jriddler.columns.fk.ForeignKeysBuilder;
 import com.jriddler.sql.LoggableInsertQuery;
 import com.jriddler.sql.SingleConnectionDataSource;
 import com.jriddler.text.Help;
+import com.jriddler.text.InsertQuery;
 import com.jriddler.text.Version;
 import org.codejargon.fluentjdbc.api.FluentJdbc;
 import org.codejargon.fluentjdbc.api.FluentJdbcBuilder;

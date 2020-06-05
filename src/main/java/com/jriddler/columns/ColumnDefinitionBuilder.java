@@ -97,34 +97,37 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
             final String name,
             final Map<String, String> customValues
     ) {
-        final Optional<String> userDefinedValue =
-                Optional.ofNullable(customValues.get(name));
-        if (type == Types.INTEGER || type == Types.TINYINT || type == Types.SMALLINT) {
+        final Optional<String> userDefinedValue = Optional.ofNullable(customValues.get(name));
+        //int
+        if (ColumnDefinition.isInt(type)) {
             return userDefinedValue
                     .map(value -> new IntColumn(name, Integer.parseInt(value)))
                     .orElse(new IntColumn(name));
         }
-        if (type == Types.VARCHAR) {
+        //string
+        if (ColumnDefinition.isString(type)) {
             return userDefinedValue
                     .map(value -> new VarCharColumn(name, length, value))
                     .orElse(new VarCharColumn(name, length));
         }
+        //bit
         if (type == Types.BIT) {
             return userDefinedValue
                     .map(value -> new BoolColumn(name, Boolean.parseBoolean(value)))
                     .orElse(new BoolColumn(name));
         }
+        //long
         if (type == Types.BIGINT) {
             return userDefinedValue
                     .map(value -> new BigIntColumn(name, Long.parseLong(value)))
                     .orElse(new BigIntColumn(name));
         }
+        //dates
         if (type == Types.TIMESTAMP) {
             return userDefinedValue
                     .map(value -> new TimeStampColumn(name, value))
                     .orElse(new TimeStampColumn(name));
         }
-
         throw new IllegalArgumentException(
                 String.format(
                         "Column with name [%s] doesn't exist",

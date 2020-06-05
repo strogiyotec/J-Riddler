@@ -1,4 +1,4 @@
-package com.jriddler;
+package com.jriddler.text;
 
 import com.jriddler.columns.ColumnName;
 import com.jriddler.text.Text;

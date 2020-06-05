@@ -27,6 +27,16 @@ public final class UserInput implements DbSettings {
     private static final int DEFAULT_PORT = 5432;
 
     /**
+     * Default user.
+     */
+    private static final String DEFAULT_USER = "postgres";
+
+    /**
+     * Default password.
+     */
+    private static final String DEFAULT_PASSWORD = "123";
+
+    /**
      * Ctor.
      * Creates input from cli args
      *
@@ -78,7 +88,7 @@ public final class UserInput implements DbSettings {
      * Db user.
      */
     @Parameter(names = "-name", description = "User name")
-    private String username;
+    private String username = DEFAULT_USER;
 
     /**
      * Table name.
@@ -94,7 +104,7 @@ public final class UserInput implements DbSettings {
             description = "User password",
             password = true
     )
-    private String password;
+    private String password = DEFAULT_PASSWORD;
 
     /**
      * Database name.

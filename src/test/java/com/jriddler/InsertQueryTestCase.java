@@ -2,6 +2,7 @@ package com.jriddler;
 
 import com.jriddler.columns.*;
 import com.jriddler.columns.jdbc.*;
+import com.jriddler.text.InsertQuery;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
