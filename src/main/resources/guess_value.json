@@ -1,0 +1,9 @@
+{
+  "glossary": {
+    "title": "Description of the file",
+    "description": "This json file contains the popular values for popular column names. For example if column name is email then valid email from list here will be chosen"
+  },
+  "email": "almas337519@gmail.com",
+  "name": "Almas",
+  "surname": "Abdrazak"
+}
