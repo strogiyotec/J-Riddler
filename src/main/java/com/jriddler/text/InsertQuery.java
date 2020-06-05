@@ -1,7 +1,6 @@
 package com.jriddler.text;
 
 import com.jriddler.columns.ColumnName;
-import com.jriddler.text.Text;
 import lombok.AllArgsConstructor;
 
 import java.util.Iterator;
