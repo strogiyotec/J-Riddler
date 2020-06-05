@@ -1,6 +1,7 @@
 package com.jriddler.columns;
 
 
+import com.jriddler.utils.StorageFromMap;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -135,7 +136,12 @@ public final class ColumnDefinitionBuilderTestCase {
                 Types.VARCHAR,
                 2,
                 "name",
-                Collections.singletonMap("name", "Long value")
+                new StorageFromMap(
+                        Collections.singletonMap(
+                                "name",
+                                "Long value"
+                        )
+                )
         ).value();
     }
 

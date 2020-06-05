@@ -1,13 +1,18 @@
 package com.jriddler.columns;
 
 
+import com.jriddler.utils.StorageFromMap;
+import com.jriddler.utils.Storage;
 import lombok.SneakyThrows;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * List of table columns.
@@ -34,7 +39,7 @@ public final class Columns implements Iterable<ColumnDefinition> {
         this.columns = Columns.dbColumns(
                 tableName,
                 dataSource,
-                Collections.emptyMap()
+                Storage.EMPTY
         );
     }
 
@@ -42,8 +47,8 @@ public final class Columns implements Iterable<ColumnDefinition> {
     /**
      * Ctor.
      *
-     * @param tableName      Table with columns
-     * @param dataSource     Datasource
+     * @param tableName    Table with columns
+     * @param dataSource   Datasource
      * @param customValues Custom column values to use
      */
     @SneakyThrows(SQLException.class)
@@ -56,7 +61,7 @@ public final class Columns implements Iterable<ColumnDefinition> {
         this.columns = Columns.dbColumns(
                 tableName,
                 dataSource,
-                customValues
+                new StorageFromMap(customValues)
         );
     }
 
@@ -68,9 +73,9 @@ public final class Columns implements Iterable<ColumnDefinition> {
     /**
      * Collect all table columns into single list.
      *
-     * @param tableName    Table name
-     * @param dataSource   Datasource
-     * @param customValues Custom values for columns
+     * @param tableName           Table name
+     * @param dataSource          Datasource
+     * @param customValuesStorage Custom values for columns
      * @return List of columns
      * @throws SQLException if failed
      */
@@ -78,7 +83,7 @@ public final class Columns implements Iterable<ColumnDefinition> {
     private static List<ColumnDefinition> dbColumns(
             final String tableName,
             final DataSource dataSource,
-            final Map<String, String> customValues
+            final Storage customValuesStorage
     ) throws SQLException {
         final List<ColumnDefinition> columns = new ArrayList<>(16);
         try (final Connection connection = dataSource.getConnection()) {
@@ -86,7 +91,7 @@ public final class Columns implements Iterable<ColumnDefinition> {
                 while (columnsMeta.next()) {
                     //Skip auto increment columns
                     if (!"YES".equals(columnsMeta.getString("IS_AUTOINCREMENT"))) {
-                        columns.add(new ColumnDefinitionBuilder(columnsMeta, customValues));
+                        columns.add(new ColumnDefinitionBuilder(columnsMeta, customValuesStorage));
                     }
                 }
             }

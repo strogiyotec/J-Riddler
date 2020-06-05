@@ -1,13 +1,12 @@
 package com.jriddler.columns;
 
 import com.jriddler.columns.jdbc.*;
+import com.jriddler.utils.Storage;
 import lombok.experimental.Delegate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,19 +23,19 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
     /**
      * Ctor.
      *
-     * @param resultSet    ResultSet
-     * @param customValues Custom values for columns
+     * @param resultSet           ResultSet
+     * @param customValuesStorage Custom values for columns
      * @throws SQLException If fails
      */
     public ColumnDefinitionBuilder(
             final ResultSet resultSet,
-            final Map<String, String> customValues
+            final Storage customValuesStorage
     ) throws SQLException {
         this(
                 resultSet.getInt("DATA_TYPE"),
                 resultSet.getInt("COLUMN_SIZE"),
                 resultSet.getString("COLUMN_NAME"),
-                customValues
+                customValuesStorage
 
         );
     }
@@ -58,36 +57,36 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
                 type,
                 length,
                 name,
-                Collections.emptyMap()
+                Storage.EMPTY
         );
     }
 
     /**
      * Ctor.
      *
-     * @param type         Type
-     * @param length       Size
-     * @param name         Name
-     * @param customValues Custom values for columns
+     * @param type                Type
+     * @param length              Size
+     * @param name                Name
+     * @param customValuesStorage Custom values for columns
      */
     @SuppressWarnings({"ReturnCount", "LineLength"})
     public ColumnDefinitionBuilder(
             final int type,
             final int length,
             final String name,
-            final Map<String, String> customValues
+            final Storage customValuesStorage
     ) {
-        this.origin = ColumnDefinitionBuilder.randomValueColumn(type, length, name, customValues);
+        this.origin = ColumnDefinitionBuilder.randomValueColumn(type, length, name, customValuesStorage);
     }
 
     /**
      * Creates column with random value.
      * TODO: fix CyclomaticComplexity
      *
-     * @param type         Sql type id
-     * @param length       Column length in bytes
-     * @param name         Column name
-     * @param customValues Custom values for columns
+     * @param type                Sql type id
+     * @param length              Column length in bytes
+     * @param name                Column name
+     * @param customValuesStorage Custom values for columns
      * @return Random value columns
      */
     @SuppressWarnings({"ReturnCount", "LineLength"})
@@ -95,9 +94,9 @@ public final class ColumnDefinitionBuilder implements ColumnDefinition {
             final int type,
             final int length,
             final String name,
-            final Map<String, String> customValues
+            final Storage customValuesStorage
     ) {
-        final Optional<String> userDefinedValue = Optional.ofNullable(customValues.get(name));
+        final Optional<String> userDefinedValue = customValuesStorage.get(name);
         //int
         if (ColumnDefinition.isInt(type)) {
             return userDefinedValue
