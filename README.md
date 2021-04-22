@@ -16,8 +16,7 @@ If you are tired from writing these huge queries then **J-Riddle** is here to he
 
 ## Definition
 
-**J-Riddler** gives you a plain and simple CLI to fill these tables instead of writing huge **INSERT** queries by your own.
-The final jar size is 1MB in size(can be improved using [Graal native images](https://www.graalvm.org/))
+**J-Riddler** gives you a plain and simple CLI to fill these tables instead of writing huge **INSERT** queries by your own. **J-Riddler** is written in Java so you have to have a JVM installed in order to run it. GraalVM support is expected in order to distibute J-Riddler as a single binary executable.
 
 ## Solution
 
@@ -86,6 +85,9 @@ java -jar target/jriddler.jar -table test -host localhost -port 5432 -name postg
 
 in this case **J-Riddler** will use **test@gmail.com** as a value for **email** and random values for other columns
 
+
+## TODO
+1. Add a native image support  
 
 ## Contributions
 
