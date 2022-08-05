@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.26</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -135,8 +135,7 @@
                         <configuration>
                             <finalName>jriddler</finalName>
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.jriddler.Main</mainClass>
                                 </transformer>
                             </transformers>
